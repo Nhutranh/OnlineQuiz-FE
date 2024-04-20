@@ -2,15 +2,17 @@ import { useState } from 'react';
 
 import { Backdrop, Button } from '~/components';
 import FormQuestionCreate from './FormQuestionCreate';
+import Icons from '~/assets/icons';
 
 function CreateQuestionModal() {
   const [open, setOpen] = useState(false);
   return (
     <div>
       <Button
-        className="w-full px-5 py-2 text-sm text-white bg-primary shadow-success hover:shadow-success_hover"
+        className="w-full flex items-center gap-x-2 px-3 py-2 text-sm text-white bg-primary shadow-success hover:shadow-success_hover"
         onClick={() => setOpen(true)}
       >
+        <Icons.Plus />
         <p>Thêm câu hỏi</p>
       </Button>
       {open && (

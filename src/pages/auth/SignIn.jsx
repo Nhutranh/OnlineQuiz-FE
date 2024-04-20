@@ -28,7 +28,9 @@ function SignInPage() {
       });
     } catch (error) {
       setIsLoging(false);
-      toast.error(error.message, { toastId: 'sign_in' });
+      toast.error('Thông tin đăng nhập không chính xác', {
+        toastId: 'login_failed',
+      });
     }
   });
 

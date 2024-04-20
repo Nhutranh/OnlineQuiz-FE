@@ -3,17 +3,23 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { deleteCategoryById, getAllCategories } from '~/apis';
 import Icons from '~/assets/icons';
-import { Button, DialogComfirm, Input } from '~/components';
+import { Button, DialogComfirm, Input, Loading } from '~/components';
 
 function Category() {
   const [searchKeywords, setSearchKeywords] = useState('');
+  const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
   const [deletingId, setDeletingId] = useState();
+
   useEffect(() => {
     (async () => {
-      const listCategories = await getAllCategories();
-      if (listCategories && listCategories.length > 0) {
+      try {
+        const listCategories = await getAllCategories();
         setCategories(listCategories);
+      } catch (error) {
+        toast.error('Không thể lấy danh sách danh mục', { toastId: 'get_categories' });
+      } finally {
+        setLoading(false);
       }
     })();
   }, []);
@@ -24,14 +30,14 @@ function Category() {
       setCategories(categories.filter((category) => category.id !== deletingId));
       toast.success('Xóa danh mục thành công', { toastId: 'delete_category' });
     } catch (error) {
-      toast.error('Danh mục đang được sử dụng!');
+      toast.error('Không thể xóa danh mục này', { toastId: 'delete_category' });
     } finally {
       setDeletingId(null);
     }
   };
 
   return (
-    <div className="p-1">
+    <div className="w-full">
       <div className="w-full flex items-center justify-between mb-4">
         <Input
           icon={<Icons.Search />}
@@ -60,8 +66,14 @@ function Category() {
             </th>
           </tr>
         </thead>
-        <tbody className="overflow-y-auto block w-full h-[calc(100vh-14rem)] border-strike border rounded-es rounded-ee">
-          {categories && categories.length > 0 ? (
+        <tbody className="overflow-y-auto block w-full h-[calc(100vh-14rem)] border-strike border rounded-es rounded-ee bg-white">
+          {loading ? (
+            <tr className="block w-full h-full">
+              <td className="flex flex-col items-center justify-center w-full h-full">
+                <Loading />
+              </td>
+            </tr>
+          ) : categories && categories.length > 0 ? (
             categories.map((category) => (
               <tr
                 key={category.id}
@@ -72,10 +84,12 @@ function Category() {
                   {category.title}
                 </td>
                 <td className="p-3 flex-auto text-nowrap text-ellipsis overflow-hidden">
-                  {category.title}
+                  {category.description}
                 </td>
                 <td className="p-3 overflow-hidden flex-shrink-0 w-[15%]" align="left">
-                  {category.createdAt ? moment(category.createdAt).format('DD/MM/YYYY') : '--'}
+                  {category.createdAt
+                    ? moment(category.createdAt).format('hh:mm:ss A - DD/MM/YYYY')
+                    : '--'}
                 </td>
                 <td className="p-3 flex-shrink-0 w-[15%] flex items-center justify-center">
                   <Button

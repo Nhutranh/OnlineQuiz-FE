@@ -22,20 +22,13 @@ export function useAuth() {
 
   useLayoutEffect(() => {
     setLoading(true);
-
     const unregisterAuthObserver = onAuthStateChanged(authentication, async (credential) => {
       if (credential) {
         localStorage.setItem('access_token', credential.accessToken);
         getMe()
-          .then((res) => {
-            setUser(res);
-            setLoading(false);
-          })
-          .catch((err) => {
-            localStorage.removeItem('access_token');
-            toast.error(err.message, { toastId: 'user_fetching' });
-            setLoading(false);
-          });
+          .then((res) => setUser(res))
+          .catch(() => localStorage.removeItem('access_token'))
+          .finally(() => setLoading(false));
       } else {
         localStorage.removeItem('access_token');
         setLoading(false);
@@ -75,15 +68,13 @@ export function useAuth() {
               firebaseId: data.uid,
               password: hash,
             })
-              .then(() => {
-                setLoading(false);
-              })
               .catch((err) => {
                 signOutFirebase(authentication);
                 localStorage.removeItem('access_token');
                 setLoading(false);
                 console.error(err.message);
-              });
+              })
+              .finally(() => setLoading(false));
           });
       })
       .catch(() => setLoading(false));
@@ -94,22 +85,18 @@ export function useAuth() {
       .then(async ({ user }) => {
         localStorage.setItem('access_token', user.accessToken);
         await getMe()
-          .then((res) => {
-            setUser(res.data);
-            setLoading(false);
-          })
-          .catch(() => {
-            signOutFirebase(authentication);
+          .then((res) => setUser(res))
+          .catch(async () => {
+            await signOutFirebase(authentication);
             localStorage.removeItem('access_token');
-            toast.error('Thông tin đăng nhập không chính xác', {
-              toastId: 'user_fetching',
-            });
-          });
+            return Promise.reject('Thông tin đăng nhập không chính xác');
+          })
+          .finally(() => setLoading(false));
       })
       .catch(() => {
-        setLoading(false);
-        throw new Error('Thông tin đăng nhập không chính xác');
-      });
+        return Promise.reject('Thông tin đăng nhập không chính xác');
+      })
+      .finally(() => setLoading(false));
 
   const signOut = () => {
     signOutFirebase(authentication)
@@ -133,6 +120,10 @@ export function useAuth() {
     }
   };
 
+  const changePassword = async ({ oldPassword, newPassword }) => {
+    console.log('Change Password', { oldPassword, newPassword });
+  };
+
   return {
     user,
     loading,
@@ -140,5 +131,6 @@ export function useAuth() {
     signInWithSocial,
     signUpAccount,
     signOut,
+    changePassword,
   };
 }

@@ -18,11 +18,7 @@ axiosClient.interceptors.request.use(async (config) => {
 
 axiosClient.interceptors.response.use(
   (response) => response.data,
-  (error) => {
-    console.error(error);
-    toast.error(error.response?.data?.message || 'Có lỗi xảy ra!');
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 export { axiosClient };

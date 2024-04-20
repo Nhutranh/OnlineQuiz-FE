@@ -2,17 +2,17 @@ import { Navigate, createBrowserRouter } from 'react-router-dom';
 import { AuthLayout, DashBoardLayout } from '~/layouts';
 import NotFound from '~/pages/NotFound';
 
-import { Account, Category, ConfigurationLayout } from '~/pages/admin/Configuration';
+import { Account, Category } from '~/pages/admin/Configuration';
 //import { DetailExam, ExamList } from '~/pages/admin/Exam';
 
+import { CreateCategory } from '~/pages/admin/Caterogy';
+import { Check_Practice } from '~/pages/admin/Exam';
+import ExamWrapper from '~/pages/admin/Exam/ExamWrapper';
 import Overview from '~/pages/admin/Overview';
 import { QuestionWrapper } from '~/pages/admin/Question';
 import { SignInPage, SignUpPage } from '~/pages/auth';
 import { StudentExcises } from '~/pages/student';
 import router from './const';
-import ExamWrapper from '~/pages/admin/Exam/ExamWrapper';
-import { CreateCategory } from '~/pages/admin/Caterogy';
-import { Check_Practice } from '~/pages/admin/Exam';
 
 const routes = createBrowserRouter([
   {
@@ -24,7 +24,7 @@ const routes = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Navigate to={`${router.admin}/overview`} />,
+            element: <Navigate to={`${router.admin}/exam`} />,
           },
           {
             path: 'overview',
@@ -57,22 +57,12 @@ const routes = createBrowserRouter([
             element: <div>students</div>,
           },
           {
-            path: 'configurations',
-            element: <ConfigurationLayout />,
-            children: [
-              {
-                index: true,
-                element: <Navigate to={`${router.admin}/configurations/account`} />,
-              },
-              {
-                path: 'account',
-                element: <Account />,
-              },
-              {
-                path: 'category',
-                element: <Category />,
-              },
-            ],
+            path: 'accounts',
+            element: <Account />,
+          },
+          {
+            path: 'categories',
+            element: <Category />,
           },
         ],
       },

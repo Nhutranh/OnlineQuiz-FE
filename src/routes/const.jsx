@@ -7,20 +7,20 @@ const router = {
   admin: '/admin',
   studentList: '/admin/students',
   question: '/admin/question',
-  configuration: '/admin/configurations',
+  category: '/admin/categories',
+  account: '/admin/accounts',
   exam: '/admin/exam',
   check_practice: '/admin/exam/check_practice',
-  category: '/admin/category',
   signIn: '/auth/sign-in',
   signUp: '/auth/sign-up',
 };
 
 export const AdminNavLinks = [
-  {
-    path: `${router.admin}/overview`,
-    name: 'Tổng quan',
-    icon: <Icons.Dashboard />,
-  },
+  // {
+  //   path: `${router.admin}/overview`,
+  //   name: 'Tổng quan',
+  //   icon: <Icons.Dashboard />,
+  // },
   {
     path: router.exam,
     name: 'Kho bài tập',
@@ -37,8 +37,13 @@ export const AdminNavLinks = [
     icon: <Icons.Academic />,
   },
   {
-    path: router.configuration,
-    name: 'Dữ liệu tham chiếu',
+    path: router.account,
+    name: 'Tài khoản',
+    icon: <Icons.User />,
+  },
+  {
+    path: router.category,
+    name: 'Danh mục câu hỏi',
     icon: <Icons.Configuration />,
   },
 ];
