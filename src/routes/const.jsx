@@ -9,6 +9,7 @@ const router = {
   question: '/admin/question',
   configuration: '/admin/configurations',
   exam: '/admin/exam',
+  check_practice: '/admin/exam/check_practice',
   category: '/admin/category',
   signIn: '/auth/sign-in',
   signUp: '/auth/sign-up',

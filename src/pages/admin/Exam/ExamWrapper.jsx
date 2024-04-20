@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { getExams } from '~/apis';
+import { getAllCategories, getExams } from '~/apis';
 import { Backdrop } from '~/components';
 import { useExamStore } from '~/store';
 import DetailExam from './DetailExam';
 import UpdateExam from './UpdateExam';
 import DeleteExam from './DeleteExam';
 import ExamList from './ExamList';
+import { CreateCategory } from '../Caterogy';
+import { useState } from 'react';
 
 const ModalFormObj = {
   ['view']: (
@@ -38,10 +40,39 @@ function ExamWrapper() {
     })();
   }, [setExamList]);
 
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    (async () => {
+      try {
+        const listCategories = await getAllCategories();
+
+        if (listCategories && listCategories.length > 0) {
+          setCategories(
+            listCategories.map((category) => ({
+              display: category.title,
+              value: category.id,
+            }))
+          );
+        }
+      } catch (error) {
+        toast.error(error.message, { toastId: 'fetch_question' });
+      }
+    })();
+  }, []);
+
+  const handleQuizOfCateChange = (newQuizOfCate) => {
+    setExamList(newQuizOfCate);
+  };
+
   return (
     <>
       <div className="w-full">
-        <ExamList />
+        <div className=" m-2 p-2 flex">
+          <div className="z-10">
+            <CreateCategory cate={categories} onQuizOfCateChange={handleQuizOfCateChange} />
+          </div>
+        </div>
+        <ExamList category={categories} />
       </div>
 
       {targetExam && modal && ModalFormObj[modal]}

@@ -8,10 +8,11 @@ import { Account, Category, ConfigurationLayout } from '~/pages/admin/Configurat
 import Overview from '~/pages/admin/Overview';
 import { QuestionWrapper } from '~/pages/admin/Question';
 import { SignInPage, SignUpPage } from '~/pages/auth';
-import { StartPractice, StudentExcises } from '~/pages/student';
+import { StudentExcises } from '~/pages/student';
 import router from './const';
 import ExamWrapper from '~/pages/admin/Exam/ExamWrapper';
 import { CreateCategory } from '~/pages/admin/Caterogy';
+import { Check_Practice } from '~/pages/admin/Exam';
 
 const routes = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ const routes = createBrowserRouter([
               {
                 index: true,
                 element: <ExamWrapper />,
+              },
+              {
+                path: 'check_practice/:id',
+                element: <Check_Practice />,
               },
             ],
           },
@@ -81,10 +86,6 @@ const routes = createBrowserRouter([
           {
             path: 'excises',
             element: <StudentExcises />,
-          },
-          {
-            path: 'practice',
-            element: <StartPractice />,
           },
         ],
       },

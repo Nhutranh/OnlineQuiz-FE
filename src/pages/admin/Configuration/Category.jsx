@@ -24,7 +24,7 @@ function Category() {
       setCategories(categories.filter((category) => category.id !== deletingId));
       toast.success('Xóa danh mục thành công', { toastId: 'delete_category' });
     } catch (error) {
-      toast.error(error.message, { toastId: 'delete_category' });
+      toast.error('Danh mục đang được sử dụng!');
     } finally {
       setDeletingId(null);
     }

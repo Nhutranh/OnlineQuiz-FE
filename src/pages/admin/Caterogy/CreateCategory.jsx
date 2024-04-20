@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { axiosClient, deleteCategoryById, getQuizOfCategory } from '~/apis';
+import { getQuizOfCategory } from '~/apis';
 import Icons from '~/assets/icons';
-import { Button, DialogComfirm } from '~/components';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
@@ -10,9 +9,8 @@ const CreateCategory = ({ cate, onQuizOfCateChange }) => {
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [showDisplay, setShowDisplay] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenDiaLog, setIsOpenDiaLog] = useState(false);
-  const [newLanguage, setNewLanguage] = useState('');
-  const [languages, setLanguages] = useState([]);
+  // const [newLanguage, setNewLanguage] = useState('');
+  // const [languages, setLanguages] = useState([]);
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -23,26 +21,26 @@ const CreateCategory = ({ cate, onQuizOfCateChange }) => {
     setIsOpen(false);
   };
 
-  const handleInputChange = (event) => {
-    setNewLanguage(event.target.value);
-  };
+  // const handleInputChange = (event) => {
+  //   setNewLanguage(event.target.value);
+  // };
 
-  const addLanguage = async () => {
-    if (newLanguage.trim() !== '') {
-      try {
-        const response = await axiosClient.post('/category/add', {
-          title: newLanguage,
-        });
-        console.log('Response:', response.data);
-        const updatedLanguages = [...languages, newLanguage];
-        setLanguages(updatedLanguages);
-        setIsOpen(false);
-        setNewLanguage('');
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    }
-  };
+  // const addLanguage = async () => {
+  //   if (newLanguage.trim() !== '') {
+  //     try {
+  //       const response = await axiosClient.post('/category/add', {
+  //         title: newLanguage,
+  //       });
+  //       console.log('Response:', response.data);
+  //       const updatedLanguages = [...languages, newLanguage];
+  //       setLanguages(updatedLanguages);
+  //       setIsOpen(false);
+  //       setNewLanguage('');
+  //     } catch (error) {
+  //       console.error('Error:', error);
+  //     }
+  //   }
+  // };
 
   const [quizOfCate, setQuizOfCate] = useState([]);
   useEffect(() => {
@@ -61,27 +59,11 @@ const CreateCategory = ({ cate, onQuizOfCateChange }) => {
     onQuizOfCateChange(quizOfCate);
   }, [quizOfCate]);
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      addLanguage();
-    }
-  };
-
-  const handleDelete = async (categories) => {
-    console.log('XOA', categories);
-    //const isSelect = cate.filter((item) => item.id !== categories);
-    try {
-      const response = await deleteCategoryById(categories);
-      if (response) {
-        toast.success('Xóa danh mục thành công', { toastId: 'delete_category' });
-      }
-    } catch (error) {
-      toast.error(error.message, { toastId: 'delete_category' });
-    }
-  };
-  const handleCancel = () => {
-    setIsOpenDiaLog(false);
-  };
+  // const handleKeyDown = (event) => {
+  //   if (event.key === 'Enter') {
+  //     addLanguage();
+  //   }
+  // };
 
   return (
     <div className="relative">
@@ -102,25 +84,9 @@ const CreateCategory = ({ cate, onQuizOfCateChange }) => {
               >
                 {categoris.display}
               </button>
-              <Button
-                onClick={() => setIsOpenDiaLog(true)}
-                className="p-2 text-danger hover:bg-danger hover:bg-opacity-10 disabled:hover:bg-transparent"
-              >
-                <Icons.Trash />
-              </Button>
-              {isOpenDiaLog && (
-                <DialogComfirm
-                  icon={<Icons.Exclamation />}
-                  title="Xác nhận xóa danh mục"
-                  body="Bạn có chắc chắn muốn xóa danh mục này không?"
-                  onCancel={handleCancel}
-                  onConfirm={() => handleDelete(categoris.value)}
-                  className="max-w-lg text-danger"
-                />
-              )}
             </div>
           ))}
-          <div className="px-4 py-2 text-sm">
+          {/* <div className="px-4 py-2 text-sm">
             <input
               type="text"
               placeholder="Thêm ngôn ngữ mới..."
@@ -129,7 +95,7 @@ const CreateCategory = ({ cate, onQuizOfCateChange }) => {
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
             />
-          </div>
+          </div> */}
         </div>
       )}
     </div>
