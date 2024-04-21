@@ -80,7 +80,7 @@ function Account() {
                   {account.createdAt ? moment(account.createdAt).format('DD/MM/YYYY') : '--'}
                 </td>
                 <td className="p-3 flex-shrink-0 w-[15%] text-nowrap text-ellipsis overflow-hidden">
-                  {account.createdBy || '--'}
+                  {account.createBy || '--'}
                 </td>
                 <td className="p-3 flex-shrink-0 w-[10%] flex items-center">
                   <Button
