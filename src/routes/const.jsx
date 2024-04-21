@@ -8,7 +8,7 @@ const router = {
   studentList: '/admin/students',
   question: '/admin/question',
   category: '/admin/categories',
-  account: '/admin/accounts',
+  teacher: '/admin/teachers',
   exam: '/admin/exam',
   check_practice: '/admin/exam/check_practice',
   signIn: '/auth/sign-in',
@@ -32,19 +32,19 @@ export const AdminNavLinks = [
     icon: <Icons.DocumentText />,
   },
   {
+    path: router.category,
+    name: 'Danh mục',
+    icon: <Icons.Squared />,
+  },
+  {
     path: router.studentList,
     name: 'Học viên',
     icon: <Icons.Academic />,
   },
   {
-    path: router.account,
+    path: router.teacher,
     name: 'Tài khoản',
     icon: <Icons.User />,
-  },
-  {
-    path: router.category,
-    name: 'Danh mục câu hỏi',
-    icon: <Icons.Configuration />,
   },
 ];
 

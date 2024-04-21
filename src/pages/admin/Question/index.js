@@ -1,1 +1,1 @@
-export { default as QuestionWrapper } from './QuestionWrapper';
+export { default } from './QuestionWrapper';

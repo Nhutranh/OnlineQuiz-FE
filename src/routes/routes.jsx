@@ -1,17 +1,12 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 import { AuthLayout, DashBoardLayout } from '~/layouts';
 import NotFound from '~/pages/NotFound';
-
-import { Account, Category } from '~/pages/admin/Configuration';
-//import { DetailExam, ExamList } from '~/pages/admin/Exam';
-
-import { CreateCategory } from '~/pages/admin/Caterogy';
 import { Check_Practice } from '~/pages/admin/Exam';
 import ExamWrapper from '~/pages/admin/Exam/ExamWrapper';
-import Overview from '~/pages/admin/Overview';
-import { QuestionWrapper } from '~/pages/admin/Question';
+import { Overview, QuestionWarehouse, Category, Teachers, Trainees } from '~/pages/admin';
 import { SignInPage, SignUpPage } from '~/pages/auth';
 import { StudentExcises } from '~/pages/student';
+
 import router from './const';
 
 const routes = createBrowserRouter([
@@ -33,11 +28,7 @@ const routes = createBrowserRouter([
 
           {
             path: 'question',
-            element: <QuestionWrapper />,
-          },
-          {
-            path: 'category',
-            element: <CreateCategory />,
+            element: <QuestionWarehouse />,
           },
           {
             path: 'exam',
@@ -54,11 +45,21 @@ const routes = createBrowserRouter([
           },
           {
             path: 'students',
-            element: <div>students</div>,
+            children: [
+              {
+                index: true,
+                element: <Trainees />,
+              },
+            ],
           },
           {
-            path: 'accounts',
-            element: <Account />,
+            path: 'teachers',
+            children: [
+              {
+                index: true,
+                element: <Teachers />,
+              },
+            ],
           },
           {
             path: 'categories',

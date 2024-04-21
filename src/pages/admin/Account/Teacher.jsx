@@ -41,7 +41,7 @@ function Account() {
       <div className="w-full flex items-center justify-end mb-4">
         <Button className="flex items-center gap-x-2 px-4 py-2 text-sm text-white bg-primary shadow-success hover:shadow-success_hover">
           <Icons.Plus />
-          <p>Tạo mới tài khoản</p>
+          <p>Thêm mới</p>
         </Button>
       </div>
 
@@ -56,7 +56,7 @@ function Account() {
             <th className="p-3 flex-shrink-0 w-[10%]">Hành động</th>
           </tr>
         </thead>
-        <tbody className="overflow-y-auto block w-full h-[calc(100vh-14rem)] border-strike border rounded-es rounded-ee bg-white">
+        <tbody className="overflow-y-auto block w-full h-[calc(100vh-12rem)] border-strike border rounded-es rounded-ee bg-white">
           {loading ? (
             <tr className="block w-full h-full">
               <td className="flex flex-col items-center justify-center w-full h-full">
@@ -85,10 +85,10 @@ function Account() {
                 <td className="p-3 flex-shrink-0 w-[10%] flex items-center">
                   <Button
                     onClick={() => setDeletingId(account.id)}
-                    className="flex items-center gap-x-1 rounded px-2 py-1 text-danger hover:bg-red-200 hover:bg-opacity-40"
+                    className="text-xs border border-danger flex items-center gap-x-1 rounded px-2 py-1 text-danger hover:bg-red-200 hover:bg-opacity-40"
                   >
                     <Icons.Trash />
-                    <p className="font-semibold text-sm">Xóa</p>
+                    <p className="font-semibold">Xóa</p>
                   </Button>
                 </td>
               </tr>
