@@ -26,6 +26,7 @@ import Paper from './Paper';
 import Dashboard from './Dashboard';
 import DownArrow from './DownArrow';
 import Squared from './Squared';
+import X from './X';
 
 export default {
   Squared,
@@ -44,6 +45,7 @@ export default {
   Email,
   Key,
   User,
+  X,
   ChartPie,
   DocumentText,
   Search,

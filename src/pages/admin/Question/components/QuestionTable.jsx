@@ -28,7 +28,7 @@ function QuestionTable() {
             <th className="p-3 flex-shrink-0 w-[13%]">Loại câu hỏi</th>
             <th className="p-3 flex-shrink-0 w-[15%]">Danh mục</th>
             <th className="p-3 flex-shrink-0 w-[15%]">Thời gian</th>
-            <th className="p-3 flex-shrink-0 w-[10%]">Hành động</th>
+            <th className="p-3 flex-shrink-0 w-[12%]">Hành động</th>
           </tr>
         </thead>
         <tbody className="overflow-y-auto block h-[calc(100vh-12rem)] w-full">
@@ -47,7 +47,7 @@ function QuestionTable() {
                 <td className="p-3 overflow-hidden flex-shrink-0 w-[15%]">
                   {moment(question.createdAt).format('HH:mm, DD/MM/YYYY')}
                 </td>
-                <td className="p-3 flex-shrink-0 w-[10%]">
+                <td className="p-3 flex-shrink-0 w-[12%]">
                   <div className="flex items-center gap-x-2">
                     <Button
                       onClick={() => handleOpenModal({ type: 'view', question })}

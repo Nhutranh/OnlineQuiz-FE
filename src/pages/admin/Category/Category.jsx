@@ -130,7 +130,7 @@ function Category() {
           />
         )}
         {isCreating && (
-          <FormCreateModal onCancel={() => setIsCreating(false)} className="md:max-w-3xl " />
+          <FormCreateModal onCancel={() => setIsCreating(false)} onClose={() => setIsCreating(false)} className="md:max-w-3xl " />
         )}
       </div>
     </>

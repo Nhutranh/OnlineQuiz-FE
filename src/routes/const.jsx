@@ -10,7 +10,7 @@ const router = {
   category: '/admin/categories',
   teacher: '/admin/teachers',
   exam: '/admin/exam',
-  check_practice: '/admin/exam/check_practice',
+  checkpractice: '/admin/checkpractice',
   signIn: '/auth/sign-in',
   signUp: '/auth/sign-up',
 };

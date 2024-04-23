@@ -66,11 +66,7 @@ function ExamWrapper() {
   return (
     <>
       <div className="w-full">
-        <div className=" m-2 p-2 flex">
-          <div className="z-10">
-            {/* <CreateCategory cate={categories} onQuizOfCateChange={handleQuizOfCateChange} /> */}
-          </div>
-        </div>
+        
         <ExamList category={categories} />
       </div>
 

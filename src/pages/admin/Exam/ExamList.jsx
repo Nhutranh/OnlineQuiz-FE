@@ -45,7 +45,7 @@ export default function ExamList({ category }) {
         <div className="h-full overflow-y-auto w-full flex flex-wrap">
           {examList.map((exam) => (
             <div key={exam.id}>
-              <div className="border border-2 h-[160px] w-[280px] items-center justify-between p-2 m-3 rounded-lg shadow-md bg-slate-100 hover:shadow-lg hover:scale-105 transition-transform duration-300">
+              <div className=" border-2 h-[160px] w-[280px] items-center justify-between p-2 m-3 rounded-lg shadow-md bg-slate-100 hover:shadow-lg hover:scale-105 transition-transform duration-300">
                 <div className="flex items-center space-x-4">
                   <div className="text-sm rounded text-yellow-500">
                     <Bookmark />
@@ -65,7 +65,7 @@ export default function ExamList({ category }) {
                     </p>
                     <p className="text-[14px] flex">Điểm: {exam.durationMinutes}</p>
                     <Link
-                      to={`/admin/exam/check_practice/${exam.id}`}
+                      to={`checkpractice/${exam.id}`}
                       className="px-4 py-1 text-sm text-white bg-primary shadow-success hover:shadow-success_hover rounded-md"
                     >
                       Làm bài

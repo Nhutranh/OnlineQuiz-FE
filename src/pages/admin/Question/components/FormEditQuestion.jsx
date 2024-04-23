@@ -126,6 +126,7 @@ export default function EditQuestion() {
               required
               error={errors.category?.message}
               options={categories}
+              disabled
             />
           </div>
           <FormEditor
