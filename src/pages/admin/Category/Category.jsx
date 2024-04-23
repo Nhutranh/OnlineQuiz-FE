@@ -4,14 +4,17 @@ import { toast } from 'react-toastify';
 import { deleteCategoryById, getAllCategories, searchCategory } from '~/apis';
 import Icons from '~/assets/icons';
 import { Button, DialogComfirm, Input, Loading } from '~/components';
-import FormCreateModal from './components/FormCreateModal';
+import FormUpsertCategoryModal from './components/FormUpsertCategoryModal';
+import { useDebounce } from '~/hooks';
 
 function Category() {
   const [searchKeywords, setSearchKeywords] = useState('');
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
-  const [isCreating, setIsCreating] = useState(false);
-  const [deletingId, setDeletingId] = useState();
+  const [openModal, setOpenModal] = useState(null);
+  const [targetValue, setTargetValue] = useState(null);
+
+  const debounceQuery = useDebounce(searchKeywords, 200);
 
   useEffect(() => {
     (async () => {
@@ -26,30 +29,22 @@ function Category() {
     })();
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      const searchValue = await searchCategory({ searchContent: debounceQuery });
+      setCategories(searchValue || []);
+    })();
+  }, [debounceQuery]);
+
   const handleDeleteCategory = async () => {
     try {
-      await deleteCategoryById(deletingId);
-      setCategories(categories.filter((category) => category.id !== deletingId));
+      await deleteCategoryById(targetValue.id);
+      setCategories(categories.filter((category) => category.id !== targetValue.id));
       toast.success('Xóa danh mục thành công', { toastId: 'delete_category' });
     } catch (error) {
       toast.error('Không thể xóa danh mục này', { toastId: 'delete_category' });
     } finally {
-      setDeletingId(null);
-    }
-  };
-
-  const handleKeyDown = async (event) => {
-    if (event.key === 'Enter') {
-      try {
-        const body = {
-          searchContent: searchKeywords,
-        }
-        console.log({body})
-        const liscategories = await searchCategory(body);
-        setCategories(liscategories);
-      } catch (error) {
-        toast.error('Không tìm thấy dữ liệu', { toastId: 'fail_search' });
-      }
+      setTargetValue(null);
     }
   };
 
@@ -62,13 +57,12 @@ function Category() {
             placeholder="Tìm kiếm theo tên danh mục"
             value={searchKeywords}
             onChange={(e) => setSearchKeywords(e.target.value)}
-            onKeyDown={handleKeyDown}
             className="md:max-w-[400px] flex-0"
           />
           <div>
             <Button
               className="flex-1 flex items-center gap-x-2 px-4 py-2 text-sm text-white bg-primary shadow-success hover:shadow-success_hover w-full"
-              onClick={() => setIsCreating(true)}
+              onClick={() => setOpenModal('create')}
             >
               <Icons.Plus />
               <p>Thêm mới</p>
@@ -79,7 +73,7 @@ function Category() {
         <table className="block w-full text-sm text-left rtl:text-right border-collapse">
           <thead className="text-[#3b3e66] uppercase text-xs block w-full">
             <tr className="bg-[#d1d2de] rounded-ss rounded-se w-full flex items-center text-xs">
-              <th className="p-3 w-[5%] flex-shrink-0">STT</th>
+              <th className="p-3 w-[5%] flex-shrink-0">Code</th>
               <th className="p-3 flex-shrink-0 w-[25%]">Danh mục</th>
               <th className="p-3 flex-auto">Mô tả</th>
               <th className="p-3 flex-shrink-0 w-[15%]">Thời gian</th>
@@ -106,7 +100,7 @@ function Category() {
                     {category.title}
                   </td>
                   <td className="p-3 flex-auto text-nowrap text-ellipsis overflow-hidden">
-                    {category.description}
+                    {category.description || '--'}
                   </td>
                   <td className="p-3 overflow-hidden flex-shrink-0 w-[15%]" align="left">
                     {category.createdAt
@@ -115,11 +109,19 @@ function Category() {
                   </td>
                   <td className="p-3 flex-shrink-0 w-[15%] flex items-center justify-center">
                     <Button
-                      onClick={() => setDeletingId(category.id)}
-                      className="text-xs border border-danger rounded px-2 py-1 text-danger hover:bg-red-200 hover:bg-opacity-40 flex items-center gap-1"
+                      onClick={() => {
+                        setOpenModal('edit');
+                        setTargetValue(category);
+                      }}
+                      className="text-xs rounded px-2 py-1 text-blue-500 hover:bg-blue-200 hover:bg-opacity-40"
+                    >
+                      <Icons.Pencil />
+                    </Button>
+                    <Button
+                      onClick={() => setTargetValue(category)}
+                      className="text-xs border border-danger rounded px-2 py-1 text-danger hover:bg-red-200 hover:bg-opacity-40"
                     >
                       <Icons.Trash />
-                      <p className="font-semibold">Xóa</p>
                     </Button>
                   </td>
                 </tr>
@@ -134,19 +136,43 @@ function Category() {
             )}
           </tbody>
         </table>
-        {deletingId && (
+        {targetValue && !openModal && (
           <DialogComfirm
             title="Xác nhận xóa"
             color="danger"
             icon={<Icons.Exclamation />}
             body="Bạn có chắc muốn xóa danh mục này không?"
-            onCancel={() => setDeletingId(null)}
+            onCancel={() => setTargetValue(null)}
             onConfirm={handleDeleteCategory}
             className="md:max-w-[500px]"
           />
         )}
-        {isCreating && (
-          <FormCreateModal onCancel={() => setIsCreating(false)} onClose={() => setIsCreating(false)} className="md:max-w-3xl " />
+        {openModal && (
+          <FormUpsertCategoryModal
+            isEditing={openModal === 'edit'}
+            data={openModal === 'edit' ? targetValue : null}
+            onCancel={() => {
+              setOpenModal(null);
+              setTargetValue(null);
+            }}
+            onSuccess={(value) => {
+              if (value) {
+                if (openModal === 'edit') {
+                  const index = categories.findIndex((category) => category.id === value.id);
+                  if (index > -1) {
+                    const newCategories = [...categories];
+                    newCategories[index] = value;
+                    setCategories(newCategories);
+                  }
+                } else {
+                  setCategories([...categories, value]);
+                }
+              }
+              setOpenModal(null);
+              setTargetValue(null);
+            }}
+            className="md:max-w-3xl "
+          />
         )}
       </div>
     </>

@@ -6,7 +6,13 @@ import { createCategory } from '~/apis';
 import { FormInput, FormModalWarpper, FormTextArea } from '~/components';
 import { CategorySchema } from '~/validations';
 
-export default function FormCreateModal({ onCancel, className, onClose }) {
+export default function FormUpsertCategoryModal({
+  isEditing,
+  data,
+  onCancel,
+  className,
+  onSuccess,
+}) {
   const {
     control,
     formState: { errors },
@@ -14,25 +20,27 @@ export default function FormCreateModal({ onCancel, className, onClose }) {
   } = useForm({
     mode: 'onSubmit',
     resolver: zodResolver(CategorySchema),
+    defaultValues: {
+      title: data.title || '',
+      description: data.description || '',
+    },
   });
 
   const onSubmit = async (data) => {
     try {
-      const body = {
-        title: data.title,
-        description: data.description,
-      }
-      await createCategory(body);
-      toast.success('Tạo danh mục thành công', { toastId: 'create_category' });
-      onClose()
+      const res = await createCategory(data);
+      toast.success(`${isEditing ? 'Cập nhật' : 'Tạo mới'} danh mục thành công`, {
+        toastId: 'upsert_category',
+      });
+      onSuccess(res);
     } catch (error) {
-      toast.error('Có lỗi xảy ra', { toastId: 'fail_category' });
-    } 
+      toast.error('Có lỗi xảy ra', { toastId: 'upsert_category' });
+    }
   };
 
   return (
     <FormModalWarpper
-      title="Tạo mới danh mục"
+      title={`${isEditing ? 'Cập nhật' : 'Tạo mới'} danh mục`}
       className={`mx-auto ${className}`}
       onCancel={onCancel}
       onConfirm={handleSubmit(onSubmit)}
@@ -55,8 +63,10 @@ export default function FormCreateModal({ onCancel, className, onClose }) {
   );
 }
 
-FormCreateModal.propTypes = {
+FormUpsertCategoryModal.propTypes = {
+  data: PropTypes.object,
+  isEditing: PropTypes.bool,
   onCancel: PropTypes.func.isRequired,
-  onClose: PropTypes.func,
+  onSuccess: PropTypes.func.isRequired,
   className: PropTypes.string,
 };
