@@ -11,6 +11,7 @@ export default function Input({
   label,
   className,
   placeholder,
+  onKeyDown,
 }) {
   return (
     <div className={`flex flex-col w-full gap-y-1 ${className}`}>
@@ -41,6 +42,7 @@ export default function Input({
           placeholder={placeholder}
           disabled={disabled}
           onChange={onChange}
+          onKeyDown={onKeyDown}
         />
       </div>
     </div>
@@ -57,5 +59,6 @@ Input.propTypes = {
   disabled: PropTypes.bool,
   className: PropTypes.string,
   placeholder: PropTypes.string,
+  onKeyDown: PropTypes.func,
   icon: PropTypes.node,
 };

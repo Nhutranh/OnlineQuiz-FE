@@ -10,10 +10,6 @@ import { EditorViewer } from '~/components';
 export default function CheckPractice() {
   const { id } = useParams();
 
-  // const {
-  //   control,
-  // } = useForm();
-
   const [quizToStart, setQuizToStart] = useState([]);
   const [answers, setAnswers] = useState([]);
   const [checkAnswer, setCheckAnswer] = useState([]);
@@ -83,10 +79,8 @@ export default function CheckPractice() {
         const selectedOptions = answers.find(answer => answer.questionId === ques.id)?.selectedOptions || [];
         
         const selectedString = selectedOptions.sort().toString();
-        console.log("mảng đ.a ",correctAnswers)
   
         const correctString = correctAnswers.sort().toString();
-        console.log("mảng đ.a đã chọn ",selectedOptions)
         
         if(selectedOptions.length > 1){
           return result.push({id: ques.id, correct: selectedString === correctString})
@@ -105,18 +99,18 @@ export default function CheckPractice() {
 
   return (
     <div>
-      <div className="fixed text-sm rounded-md mr-3 mt-3 border-2 shadow-md right-0 w-[300px] h-[350px] bg-gray-100 p-4">
+      <div className="fixed text-lg rounded-md mr-3 mt-3 border-2 shadow-md right-0 w-[300px] max-h-fit bg-gray-100 p-4">
         <p>
           <span className="font-bold">- {quizToStart.title} -</span>
         </p>
         <p>
-          <span>---------- * - * ----------</span>
+          <span>---------------- * - * ----------------</span>
         </p>
         <p>
         <button
             onClick={() => handleSubmitQuiz(quizToStart)}
             disabled={!handleAnswer}
-            className="px-6 mt-5 py-2 rounded-md text-sm text-white bg-primary shadow-success hover:shadow-success_hover"
+            className="px-6 w-full mt-5 py-2 rounded-md text-sm text-white bg-primary shadow-success hover:shadow-success_hover"
           >
             Kiểm tra đáp án
           </button>

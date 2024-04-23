@@ -54,7 +54,7 @@ export default function Question({
                       max="10"
                       onClick={handlePoint}
                       onChange={(e) => onPointChange(item.id, e.target.value)}
-                      className="h-[40px] w-[60px] border border-2 shadow-lg rounded-md"
+                      className="h-[40px] w-[60px] border-2 shadow-lg rounded-md"
                       type="number"
                       name="point"
                       required
@@ -65,7 +65,7 @@ export default function Question({
                       max="10"
                       onClick={handlePoint}
                       onChange={(e) => onPointChange(item.id, e.target.value)}
-                      className="h-[40px] w-[60px] border border-2 shadow-lg rounded-md"
+                      className="h-[40px] w-[60px] border-2 shadow-lg rounded-md"
                       type="number"
                       value={point.find((i) => i.id === item.id).additionalFields.marksOfQuestion}
                       name="point"

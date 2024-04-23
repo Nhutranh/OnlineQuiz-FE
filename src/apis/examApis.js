@@ -15,3 +15,5 @@ export const getQuizOfCategory = async (id) => await axiosClient.get(`/quiz/cate
 export const getQuizToStart = async (body) => await axiosClient.post('/take_exam/start-quiz', body);
 
 export const submitQuiz = async (body) => await axiosClient.post('/take_exam/submit', body);
+
+export const searchQuiz = async (body) => await axiosClient.post('/quiz/search', body);

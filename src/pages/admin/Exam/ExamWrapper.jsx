@@ -59,9 +59,6 @@ function ExamWrapper() {
     })();
   }, []);
 
-  // const handleQuizOfCateChange = (newQuizOfCate) => {
-  //   setExamList(newQuizOfCate);
-  // };
 
   return (
     <>

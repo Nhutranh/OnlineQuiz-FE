@@ -1,7 +1,10 @@
 import { compile } from 'html-to-text';
 import moment from 'moment';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { searchQues } from '~/apis';
 import Icons from '~/assets/icons';
-import { Button } from '~/components';
+import { Button, Input } from '~/components';
 import { useQuestionStore } from '~/store';
 
 const compiledConvert = compile({
@@ -11,15 +14,39 @@ const compiledConvert = compile({
 });
 
 function QuestionTable() {
-  const { questionList, openModal, setTargetQuestion } = useQuestionStore((state) => state);
+  const { questionList, setQuestionList,  openModal, setTargetQuestion } = useQuestionStore((state) => state);
+  const [searchKeywords, setSearchKeywords] = useState('');
 
   const handleOpenModal = ({ type, question }) => {
     setTargetQuestion(question);
     openModal(type);
   };
 
+  const handleKeyDown = async (event) => {
+    if (event.key === 'Enter') {
+      try {
+        const body = {
+          searchContent: searchKeywords,
+        }
+        const listQues = await searchQues(body);
+        setQuestionList(listQues);
+      } catch (error) {
+        toast.error('Không tìm thấy dữ liệu', { toastId: 'fail_search' });
+      }
+    }
+  };
+
+
   return (
     <div className="mt-5 relative sm:rounded bg-white shadow-card w-full max-h-full overflow-hidden">
+    <Input
+        icon={<Icons.Search />}
+        placeholder="Tìm kiếm theo nội dung câu hỏi"
+        value={searchKeywords}
+        onChange={(e) => setSearchKeywords(e.target.value)}
+        onKeyDown={handleKeyDown}
+        className="md:max-w-[450px] flex-0 m-3"
+    />
       <table className="block w-full text-left rtl:text-right border-collapse">
         <thead className="text-[#3b3e66] uppercase block w-full text-xs">
           <tr className="bg-[#d1d2de] rounded-se w-full flex items-center text-xs">
@@ -82,6 +109,7 @@ function QuestionTable() {
         </tbody>
       </table>
     </div>
+   
   );
 }
 

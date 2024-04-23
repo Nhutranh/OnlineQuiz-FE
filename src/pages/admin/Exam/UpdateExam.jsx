@@ -211,7 +211,7 @@ const FormEditExam = () => {
             <div className="mb-4">
               <div className="flex text-sm">
                 <span className="text-sm font-semibold mb-2 mr-5">Danh sách câu hỏi</span>
-                <span className="text-sm font-semibold mb-2 mr-5">Số câu đã chọn: </span>
+                
               </div>
               <div className="bg-gray-200 w-full rounded-md">
                 <div className="max-h-[500px] overflow-y-auto">

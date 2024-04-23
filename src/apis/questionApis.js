@@ -11,3 +11,5 @@ export const editQuestion = async (id, body) => await axiosClient.put(`/question
 export const deleteQuestion = async (id) => await axiosClient.put(`/question/delete/${id}`);
 
 export const getQuesOfCategory = async (id) => await axiosClient.get(`/question/category/${id}`);
+
+export const searchQues = async (body) => await axiosClient.post('/question/search', body);

@@ -16,11 +16,11 @@ const router = {
 };
 
 export const AdminNavLinks = [
-  // {
-  //   path: `${router.admin}/overview`,
-  //   name: 'Tổng quan',
-  //   icon: <Icons.Dashboard />,
-  // },
+  {
+    path: `${router.admin}/overview`,
+    name: 'Tổng quan',
+    icon: <Icons.Dashboard />,
+  },
   {
     path: router.exam,
     name: 'Kho bài tập',
@@ -36,11 +36,11 @@ export const AdminNavLinks = [
     name: 'Danh mục',
     icon: <Icons.Squared />,
   },
-  {
-    path: router.studentList,
-    name: 'Học viên',
-    icon: <Icons.Academic />,
-  },
+  // {
+  //   path: router.studentList,
+  //   name: 'Học viên',
+  //   icon: <Icons.Academic />,
+  // },
   {
     path: router.teacher,
     name: 'Tài khoản',

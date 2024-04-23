@@ -8,4 +8,6 @@ export const changePassword = async (form) => await axiosClient.put('/user/chang
 // Get List Admin Account
 export const getAllAccounts = async () => await axiosClient.get('/admin/adminAccount');
 export const deleteAccountById = async (userId) =>
-  await axiosClient.delete(`/admin/delete/adminAccount`, { data: { userId } });
+await axiosClient.delete(`/admin/delete/adminAccount`, { data: { userId } });
+
+export const getStatistic = async () => await axiosClient.get('/admin/statistics/quantity');

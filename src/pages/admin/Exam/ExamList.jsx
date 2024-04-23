@@ -7,9 +7,11 @@ import Bookmark from '~/assets/icons/Bookmark';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { searchQuiz } from '~/apis';
 
 export default function ExamList({ category }) {
-  const { examList, setTargetExam, openModal } = useExamStore((state) => state);
+  const { examList, setExamList, setTargetExam, openModal } = useExamStore((state) => state);
   const [isCreatingExam, setIsCreatingExam] = useState(false);
   const [searchKeywords, setSearchKeywords] = useState('');
 
@@ -22,22 +24,42 @@ export default function ExamList({ category }) {
     openModal(type);
   };
 
+  const handleInputChange = (e) => {
+    setSearchKeywords(e.target.value);
+  };
+
+  const handleKeyDown = async (event) => {
+    if (event.key === 'Enter') {
+      try {
+        const body = {
+          searchContent: searchKeywords,
+        }
+        const listExams = await searchQuiz(body);
+        setExamList(listExams);
+      } catch (error) {
+        toast.error('Không tìm thấy dữ liệu', { toastId: 'fail_search' });
+      }
+    }
+  };
+
   return (
     <div className="relative overflow-x-auto sm:rounded-lg w-full">
       <div className="flex justify-end mb-5">
         <div className="flex items-center space-x-2">
-          <Input
-            icon={<Icons.Search />}
-            placeholder="Tìm kiếm theo tên danh mục"
-            value={searchKeywords}
-            onChange={(e) => setSearchKeywords(e.target.value)}
-            className="md:max-w-[350px] flex-0"
-          />
+        <Input
+          icon={<Icons.Search />}
+          placeholder="Tìm kiếm theo tên bài tập"
+          value={searchKeywords}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          className="w-[500px] flex-0 left-0"
+        />
         </div>
         <Button
-          className="w-[120px] ml-10 px-5 py-2 text-sm text-white bg-primary shadow-success hover:shadow-success_hover"
+          className="w-[150px] flex ml-10 px-5 py-2 text-sm text-white bg-primary shadow-success hover:shadow-success_hover"
           onClick={handleCreateExam}
         >
+          <Icons.Plus/>
           Tạo bài tập
         </Button>
       </div>
@@ -45,7 +67,7 @@ export default function ExamList({ category }) {
         <div className="h-full overflow-y-auto w-full flex flex-wrap">
           {examList.map((exam) => (
             <div key={exam.id}>
-              <div className=" border-2 h-[160px] w-[280px] items-center justify-between p-2 m-3 rounded-lg shadow-md bg-slate-100 hover:shadow-lg hover:scale-105 transition-transform duration-300">
+              <div className=" border-2 h-[160px] w-[280px] items-center justify-between p-2 m-3 rounded-lg shadow-md bg-slate-50 hover:shadow-lg hover:scale-105 transition-transform duration-300">
                 <div className="flex items-center space-x-4">
                   <div className="text-sm rounded text-yellow-500">
                     <Bookmark />
@@ -66,7 +88,7 @@ export default function ExamList({ category }) {
                     <p className="text-[14px] flex">Điểm: {exam.durationMinutes}</p>
                     <Link
                       to={`checkpractice/${exam.id}`}
-                      className="px-4 py-1 text-sm text-white bg-primary shadow-success hover:shadow-success_hover rounded-md"
+                      className="px-6 py-1 text-sm text-white bg-primary shadow-success hover:shadow-success_hover rounded-md"
                     >
                       Làm bài
                     </Link>

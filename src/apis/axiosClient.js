@@ -1,6 +1,6 @@
 import axios from 'axios';
 import queryString from 'query-string';
-import { toast } from 'react-toastify';
+//import { toast } from 'react-toastify';
 
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_API_URL,

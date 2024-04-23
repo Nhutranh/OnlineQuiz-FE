@@ -27,12 +27,14 @@ import Dashboard from './Dashboard';
 import DownArrow from './DownArrow';
 import Squared from './Squared';
 import X from './X';
+import Person from './Person';
 
 export default {
   Squared,
   Dashboard,
   Paper,
   Configuration,
+  Person,
   Tag,
   Empty,
   Exclamation,

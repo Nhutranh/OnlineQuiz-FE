@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { deleteCategoryById, getAllCategories } from '~/apis';
+import { deleteCategoryById, getAllCategories, searchCategory } from '~/apis';
 import Icons from '~/assets/icons';
 import { Button, DialogComfirm, Input, Loading } from '~/components';
 import FormCreateModal from './components/FormCreateModal';
@@ -38,6 +38,21 @@ function Category() {
     }
   };
 
+  const handleKeyDown = async (event) => {
+    if (event.key === 'Enter') {
+      try {
+        const body = {
+          searchContent: searchKeywords,
+        }
+        console.log({body})
+        const liscategories = await searchCategory(body);
+        setCategories(liscategories);
+      } catch (error) {
+        toast.error('Không tìm thấy dữ liệu', { toastId: 'fail_search' });
+      }
+    }
+  };
+
   return (
     <>
       <div className="w-full">
@@ -47,6 +62,7 @@ function Category() {
             placeholder="Tìm kiếm theo tên danh mục"
             value={searchKeywords}
             onChange={(e) => setSearchKeywords(e.target.value)}
+            onKeyDown={handleKeyDown}
             className="md:max-w-[400px] flex-0"
           />
           <div>
