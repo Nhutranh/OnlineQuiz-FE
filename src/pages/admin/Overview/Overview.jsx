@@ -25,7 +25,7 @@ function Overview() {
     <div className="w-full">
       <div className="flex items-center justify-between gap-x-5 w-full">
         <Card className="w-full min-h-20 ">
-            <div className="bg-gradient-to-r from-indigo-600 to-green-300  shadow-lg rounded-lg p-6 w-60% hover:scale-105 transition-transform duration-300">
+            <div className=" bg-green-300 shadow-lg rounded-lg p-6 w-60%  transition-transform duration-300">
           <div className="flex items-center">
             <div className="bg-white rounded-full h-8 w-8 flex items-center justify-center">
               <Icons.Question/>
@@ -38,7 +38,7 @@ function Overview() {
         </div>
         </Card>
         <Card className="w-full min-h-20">
-            <div className="bg-gradient-to-r from-indigo-600 to-green-300 shadow-lg rounded-lg p-6 w-70% hover:scale-105 transition-transform duration-300 ">
+            <div className="bg-blue-300 shadow-lg rounded-lg p-6 w-70%  transition-transform duration-300 ">
           <div className="flex items-center">
             <div className="bg-white rounded-full h-8 w-8 flex items-center justify-center">
               <Icons.Plus/>
@@ -51,7 +51,7 @@ function Overview() {
         </div>
         </Card>
         <Card className="w-full min-h-20 ">
-            <div className="bg-gradient-to-r from-indigo-600 to-green-300 shadow-lg rounded-lg p-6 w-70% hover:scale-105 transition-transform duration-300">
+            <div className="bg-purple-300 shadow-lg rounded-lg p-6 w-70%  transition-transform duration-300">
           <div className="flex items-center">
             <div className="bg-white rounded-full h-8 w-8 flex items-center justify-center">
               <Icons.Person/>

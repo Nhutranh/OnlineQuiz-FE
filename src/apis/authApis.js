@@ -10,4 +10,4 @@ export const getAllAccounts = async () => await axiosClient.get('/admin/adminAcc
 export const deleteAccountById = async (userId) =>
 await axiosClient.delete(`/admin/delete/adminAccount`, { data: { userId } });
 
-export const getStatistic = async () => await axiosClient.get('/admin/statistics/quantity');
+

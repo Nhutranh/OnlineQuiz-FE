@@ -17,7 +17,7 @@ function Category() {
   const debounceQuery = useDebounce(searchKeywords, 200);
 
   useEffect(() => {
-    (async () => {
+    const fetchCategories = async () => {
       try {
         const listCategories = await getAllCategories();
         setCategories(listCategories);
@@ -26,8 +26,10 @@ function Category() {
       } finally {
         setLoading(false);
       }
-    })();
-  }, []);
+    };
+  
+    fetchCategories();
+  }, [setCategories]);
 
   useEffect(() => {
     (async () => {
@@ -108,7 +110,7 @@ function Category() {
                       : '--'}
                   </td>
                   <td className="p-3 flex-shrink-0 w-[15%] flex items-center justify-center">
-                    <Button
+                    {/* <Button
                       onClick={() => {
                         setOpenModal('edit');
                         setTargetValue(category);
@@ -116,7 +118,7 @@ function Category() {
                       className="text-xs rounded px-2 py-1 text-blue-500 hover:bg-blue-200 hover:bg-opacity-40"
                     >
                       <Icons.Pencil />
-                    </Button>
+                    </Button> */}
                     <Button
                       onClick={() => setTargetValue(category)}
                       className="text-xs border border-danger rounded px-2 py-1 text-danger hover:bg-red-200 hover:bg-opacity-40"

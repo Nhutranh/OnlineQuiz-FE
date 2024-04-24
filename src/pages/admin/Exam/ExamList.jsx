@@ -7,13 +7,16 @@ import Bookmark from '~/assets/icons/Bookmark';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { searchQuiz } from '~/apis';
+import { useEffect } from 'react';
+import { useDebounce } from '~/hooks';
 
 export default function ExamList({ category }) {
   const { examList, setExamList, setTargetExam, openModal } = useExamStore((state) => state);
   const [isCreatingExam, setIsCreatingExam] = useState(false);
   const [searchKeywords, setSearchKeywords] = useState('');
+
+  const debounceQuery = useDebounce(searchKeywords, 200);
 
   const handleCreateExam = () => {
     setIsCreatingExam(true);
@@ -28,19 +31,14 @@ export default function ExamList({ category }) {
     setSearchKeywords(e.target.value);
   };
 
-  const handleKeyDown = async (event) => {
-    if (event.key === 'Enter') {
-      try {
-        const body = {
-          searchContent: searchKeywords,
-        }
-        const listExams = await searchQuiz(body);
-        setExamList(listExams);
-      } catch (error) {
-        toast.error('Không tìm thấy dữ liệu', { toastId: 'fail_search' });
-      }
-    }
-  };
+  
+  useEffect(() => {
+    (async () => {
+      const searchValue = await searchQuiz({ searchContent: debounceQuery });
+      setExamList(searchValue || []);
+    })();
+  }, [debounceQuery]);
+
 
   return (
     <div className="relative overflow-x-auto sm:rounded-lg w-full">
@@ -51,7 +49,6 @@ export default function ExamList({ category }) {
           placeholder="Tìm kiếm theo tên bài tập"
           value={searchKeywords}
           onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
           className="w-[500px] flex-0 left-0"
         />
         </div>

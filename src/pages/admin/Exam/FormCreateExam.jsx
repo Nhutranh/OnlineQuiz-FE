@@ -8,6 +8,8 @@ import { createExam, getQuestions } from '~/apis';
 import Icons from '~/assets/icons';
 import { useExamStore, useQuestionStore } from '~/store';
 import Question from './Question';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { FormExamCreateSchema } from '~/validations/exam';
 
 const FormCreateExam = ({ onClose, cate }) => {
   const { addNewExam } = useExamStore((state) => state);
@@ -16,11 +18,18 @@ const FormCreateExam = ({ onClose, cate }) => {
     control,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm({
+    resolver: zodResolver(FormExamCreateSchema),
+  });
   const [showQuestionList, setShowQuestionList] = useState(false);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [quesPoint, setQuesPoint] = useState([]); // chứa quesID + Point
   const [containerQues, setContainerQues] = useState([]);
+
+  // console.log({quesPoint})
+  // const totalPoints = quesPoint.map(element => parseInt(element.point)).reduce((acc, curr) => acc + curr, 0);
+  // console.log({totalPoints})
+
 
   const handleQuestionSelect = (questionID) => {
     if (selectedQuestions && selectedQuestions.includes(questionID)) {
@@ -60,8 +69,6 @@ const FormCreateExam = ({ onClose, cate }) => {
           marksOfQuestion: parseInt(q.point) || 0,
         })),
       };
-
-      console.log({ body, quesPoint });
 
       const response = await createExam(body);
 
@@ -131,8 +138,8 @@ const FormCreateExam = ({ onClose, cate }) => {
                   <FormInput
                     control={control}
                     name="maxMarks"
-                    title="Nhập điểm cho bài tập"
-                    placeholder="Nhập điểm"
+                    title="Điểm cho bài tập"
+                    placeholder="Điểm"
                     required
                   />
                 </div>
@@ -141,7 +148,7 @@ const FormCreateExam = ({ onClose, cate }) => {
                 <FormInput
                   control={control}
                   name="time"
-                  title="Nhập thời gian làm bài cho bài tập"
+                  title="Thời gian làm bài cho bài tập"
                   placeholder="Nhập thời gian làm bài"
                   required
                 />

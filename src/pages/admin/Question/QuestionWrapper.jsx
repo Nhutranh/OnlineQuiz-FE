@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { getQuestionTypes, getQuestions } from '~/apis';
-import { Backdrop } from '~/components';
+import { getQuestionTypes, getQuestions, searchQues } from '~/apis';
+import { Backdrop, Input } from '~/components';
 import { useQuestionStore } from '~/store';
 import {
   CreateQuestionModal,
@@ -9,6 +9,9 @@ import {
   QuestionTable,
   ViewDetailQuestion,
 } from './components';
+import Icons from '~/assets/icons';
+import { useState } from 'react';
+import { useDebounce } from '~/hooks';
 
 const ModalFormObj = {
   ['view']: (
@@ -28,6 +31,17 @@ function QuestionWrapper() {
   const { setQuestionList, modal, targetQuestion, setQuestionType } = useQuestionStore(
     (state) => state
   );
+  const [searchKeywords, setSearchKeywords] = useState('');
+
+  const debounceQuery = useDebounce(searchKeywords, 200);
+
+ 
+  useEffect(() => {
+    (async () => {
+      const searchValue = await searchQues({ searchContent: debounceQuery });
+      setQuestionList(searchValue || []);
+    })();
+  }, [debounceQuery]);
 
   useEffect(() => {
     (async () => {
@@ -47,6 +61,13 @@ function QuestionWrapper() {
     <>
       <div className="w-full">
         <div className="flex items-center w-full justify-between">
+        <Input
+        icon={<Icons.Search />}
+        placeholder="Tìm kiếm theo nội dung câu hỏi"
+        value={searchKeywords}
+        onChange={(e) => setSearchKeywords(e.target.value)}
+        className="md:max-w-[450px] flex-0 m-3"
+    />
           <div />
           <CreateQuestionModal />
         </div>

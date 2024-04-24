@@ -6,9 +6,8 @@ export default function Question({
   selectQues,
   onPointChange,
   listQuestion,
-  point,
+  // point,
 }) {
-  console.log(point);
 
   const compiledConvert = compile({
     limits: {
@@ -40,7 +39,7 @@ export default function Question({
             <tr
               onClick={() => handleSelect(item.id)}
               key={item.id}
-              className="flex bg-slate-50 hover:bg-slate-100 items-center border-b border-[#d1d2de] transition-all hover:bg-[#d1d2de] hover:bg-opacity-30 h-[45px] font-semibold text-[#3b3e66]"
+              className="flex bg-slate-50 items-center border-b border-[#d1d2de] transition-all hover:bg-[#d1d2de] hover:bg-opacity-30 h-[45px] font-semibold text-[#3b3e66]"
             >
               <td className="p-3 flex flex-auto w-[60%]">
                 {index + 1}.{compiledConvert(item.content)}
