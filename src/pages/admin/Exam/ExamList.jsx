@@ -1,4 +1,4 @@
-import { Backdrop, Button, Input } from '~/components';
+import { Backdrop, Button } from '~/components';
 import { useState } from 'react';
 import FormCreateExam from './FormCreateExam';
 import Icons from '~/assets/icons';
@@ -7,16 +7,18 @@ import Bookmark from '~/assets/icons/Bookmark';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { searchQuiz } from '~/apis';
-import { useEffect } from 'react';
-import { useDebounce } from '~/hooks';
+import { compile } from 'html-to-text';
 
 export default function ExamList({ category }) {
-  const { examList, setExamList, setTargetExam, openModal } = useExamStore((state) => state);
+  const { examList, setTargetExam, openModal } = useExamStore((state) => state);
   const [isCreatingExam, setIsCreatingExam] = useState(false);
-  const [searchKeywords, setSearchKeywords] = useState('');
-
-  const debounceQuery = useDebounce(searchKeywords, 200);
+ 
+  const compiledConvert = compile({
+    limits: {
+      ellipsis: ' ...',
+    },
+  });
+  
 
   const handleCreateExam = () => {
     setIsCreatingExam(true);
@@ -27,30 +29,13 @@ export default function ExamList({ category }) {
     openModal(type);
   };
 
-  const handleInputChange = (e) => {
-    setSearchKeywords(e.target.value);
-  };
-
-  
-  useEffect(() => {
-    (async () => {
-      const searchValue = await searchQuiz({ searchContent: debounceQuery });
-      setExamList(searchValue || []);
-    })();
-  }, [debounceQuery]);
-
+ 
 
   return (
-    <div className="relative overflow-x-auto sm:rounded-lg w-full">
+    <div>
       <div className="flex justify-end mb-5">
         <div className="flex items-center space-x-2">
-        <Input
-          icon={<Icons.Search />}
-          placeholder="Tìm kiếm theo tên bài tập"
-          value={searchKeywords}
-          onChange={handleInputChange}
-          className="w-[500px] flex-0 left-0"
-        />
+       
         </div>
         <Button
           className="w-[150px] flex ml-10 px-5 py-2 text-sm text-white bg-primary shadow-success hover:shadow-success_hover"
@@ -70,8 +55,8 @@ export default function ExamList({ category }) {
                     <Bookmark />
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold overflow-ellipsis whitespace-nowrap">
-                      {exam.title}
+                    <h3 className="text-sm font-semibold whitespace-nowrap">
+                    {compiledConvert(exam.title)}
                     </h3>
                     <p className="text-[12px]">{exam.category.title}</p>
 
@@ -79,10 +64,9 @@ export default function ExamList({ category }) {
                       Ngày tạo: {moment(exam.createdAt).format('DD/MM/YYYY, HH:mm')}
                     </p>
                     <p className="text-[14px] flex">
-                      Thời gian:
-                      {exam.maxMarks} phút
+                      Thời gian: {exam.durationMinutes} phút
                     </p>
-                    <p className="text-[14px] flex">Điểm: {exam.durationMinutes}</p>
+                    <p className="text-[14px] flex">Điểm:  {exam.maxMarks}</p>
                     <Link
                       to={`checkpractice/${exam.id}`}
                       className="px-6 py-1 text-sm text-white bg-primary shadow-success hover:shadow-success_hover rounded-md"

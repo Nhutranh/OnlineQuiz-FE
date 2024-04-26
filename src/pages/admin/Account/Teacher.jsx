@@ -90,7 +90,6 @@ function Account() {
                     className="text-xs border border-danger flex items-center gap-x-1 rounded px-2 py-1 text-danger hover:bg-red-200 hover:bg-opacity-40"
                   >
                     <Icons.Trash />
-                    <p className="font-semibold">Xóa</p>
                   </Button>
                 </td>
               </tr>

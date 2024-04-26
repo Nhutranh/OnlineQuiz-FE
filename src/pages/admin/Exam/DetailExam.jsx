@@ -14,6 +14,7 @@ export default function ViewDetailExam() {
       ellipsis: ' ...',
     },
   });
+  console.log({targetExam})
 
   const [listQues, setListQues] = useState([]);
   useEffect(() => {
@@ -28,8 +29,7 @@ export default function ViewDetailExam() {
       }
     })();
   }, []);
-  console.log(listQues);
-
+  
   return (
     <div className="w-full h-full mx-auto max-w-5xl p-10 animate-fade-down animate-duration-500">
       <form className="w-full h-full bg-white rounded-lg flex flex-col justify-between">

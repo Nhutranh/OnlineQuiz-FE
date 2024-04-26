@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { Button, FormInput, FormSelect } from '~/components';
+import { Button, FormInput, FormSelect, TextView } from '~/components';
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
@@ -25,10 +25,15 @@ const FormCreateExam = ({ onClose, cate }) => {
   const [selectedQuestions, setSelectedQuestions] = useState([]);
   const [quesPoint, setQuesPoint] = useState([]); // chứa quesID + Point
   const [containerQues, setContainerQues] = useState([]);
+  const [totalPoints, setTotalPoints] = useState(0);
 
-  // console.log({quesPoint})
-  // const totalPoints = quesPoint.map(element => parseInt(element.point)).reduce((acc, curr) => acc + curr, 0);
-  // console.log({totalPoints})
+  //tính điểm
+  useEffect(() => {
+    const points = quesPoint.map(element => parseInt(element.point)).reduce((acc, curr) => acc + curr, 0);
+    setTotalPoints(points)
+  }, [quesPoint]);
+
+  
 
 
   const handleQuestionSelect = (questionID) => {
@@ -62,13 +67,14 @@ const FormCreateExam = ({ onClose, cate }) => {
         title: data.examName,
         categoryId: data.category,
         description: data.description,
-        maxMarks: data.maxMarks,
+        maxMarks: totalPoints,
         durationMinutes: data.time,
         listQuestion: quesPoint.map((q) => ({
           questionId: q.id,
           marksOfQuestion: parseInt(q.point) || 0,
         })),
       };
+      console.log("BODY", body)
 
       const response = await createExam(body);
 
@@ -135,12 +141,11 @@ const FormCreateExam = ({ onClose, cate }) => {
                   onChange={handleCategoryForFilter}
                 />
                 <div className="mt-5">
-                  <FormInput
+                  <span className="text-sm font-bold text-icon mb-1">Điểm của bài tập</span>
+                  <TextView
                     control={control}
-                    name="maxMarks"
-                    title="Điểm cho bài tập"
-                    placeholder="Điểm"
-                    required
+                    value={totalPoints}
+                    className='text-sm border rounded-md'
                   />
                 </div>
               </div>

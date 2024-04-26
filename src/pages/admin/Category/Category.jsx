@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import { deleteCategoryById, getAllCategories, searchCategory } from '~/apis';
 import Icons from '~/assets/icons';
 import { Button, DialogComfirm, Input, Loading } from '~/components';
-import FormUpsertCategoryModal from './components/FormUpsertCategoryModal';
 import { useDebounce } from '~/hooks';
 
 function Category() {
@@ -149,7 +148,7 @@ function Category() {
             className="md:max-w-[500px]"
           />
         )}
-        {openModal && (
+        {/* {openModal && (
           <FormUpsertCategoryModal
             isEditing={openModal === 'edit'}
             data={openModal === 'edit' ? targetValue : null}
@@ -175,7 +174,7 @@ function Category() {
             }}
             className="md:max-w-3xl "
           />
-        )}
+        )} */}
       </div>
     </>
   );

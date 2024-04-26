@@ -28,6 +28,7 @@ import DownArrow from './DownArrow';
 import Squared from './Squared';
 import X from './X';
 import Person from './Person';
+import Funnel from './Funnel';
 
 export default {
   Squared,
@@ -35,6 +36,7 @@ export default {
   Paper,
   Configuration,
   Person,
+  Funnel,
   Tag,
   Empty,
   Exclamation,

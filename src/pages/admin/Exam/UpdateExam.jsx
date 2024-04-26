@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { Button, FormInput } from '~/components';
+import { Button, FormInput, TextView } from '~/components';
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
@@ -26,6 +26,14 @@ const FormEditExam = () => {
       ellipsis: ' ...',
     },
   });
+
+  const [totalPoints, setTotalPoints] = useState(0);
+  //tính điểm
+  useEffect(() => {
+    const points = quesPoint.map(element => parseInt(element.point)).reduce((acc, curr) => acc + curr, 0);
+    setTotalPoints(points)
+  }, [quesPoint]);
+
 
   useEffect(() => {
     (async () => {
@@ -97,7 +105,7 @@ const FormEditExam = () => {
         title: data.examName,
         categoryId: targetExam.category.id,
         description: data.description,
-        maxMarks: parseInt(data.point),
+        maxMarks: totalPoints,
         durationMinutes: parseInt(data.time),
         listQuestion: quesPoint.map((ques) => ({
           questionId: ques.id,
@@ -173,17 +181,29 @@ const FormEditExam = () => {
                   error={errors.category?.message}
                   onChange={handleCategoryForFilter}
                 />
-
-                <div className="mt-5">
+                {showQuestionList ? (
+                  <div className="mt-5">
+                  <span className="text-sm font-bold text-icon mb-1">Điểm của bài tập</span>
+                  <TextView
+                    control={control}
+                    value={totalPoints}
+                    className='text-sm border rounded-md'
+                  />
+                </div>
+                ) : (
+                  <div className="mt-5">
                   <FormInput
                     control={control}
                     name="point"
-                    title="Nhập điểm cho bài tập"
-                    placeholder="Nhập điểm"
+                    title="Điểm cho bài tập"
                     required
+                    disabled
                   />
                 </div>
+                )}
+                
               </div>
+              
               <div className="m-3 w-[50%]">
                 <FormInput
                   control={control}

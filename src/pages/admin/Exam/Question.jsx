@@ -6,7 +6,7 @@ export default function Question({
   selectQues,
   onPointChange,
   listQuestion,
-  // point,
+   //point,
 }) {
 
   const compiledConvert = compile({

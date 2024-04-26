@@ -1,13 +1,16 @@
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { getAllCategories, getExams } from '~/apis';
-import { Backdrop } from '~/components';
+import { filterQuizByCategory, getAllCategories, getExams, searchQuiz } from '~/apis';
+import { Backdrop, FormSelect, Input } from '~/components';
 import { useExamStore } from '~/store';
 import DetailExam from './DetailExam';
 import UpdateExam from './UpdateExam';
 import DeleteExam from './DeleteExam';
 import ExamList from './ExamList';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import Icons from '~/assets/icons';
+import { useDebounce } from '~/hooks';
 
 const ModalFormObj = {
   ['view']: (
@@ -27,6 +30,14 @@ function ExamWrapper() {
   const { setExamList, modal, targetExam } = useExamStore((state) => {
     return state;
   });
+  const [searchKeywords, setSearchKeywords] = useState('');
+
+  const debounceQuery = useDebounce(searchKeywords, 200);
+
+
+  const {
+    control,
+  } = useForm();
 
   useEffect(() => {
     (async () => {
@@ -59,11 +70,54 @@ function ExamWrapper() {
     })();
   }, []);
 
+  const handleInputChange = (e) => {
+    setSearchKeywords(e.target.value);
+  };
 
+  useEffect(() => {
+    (async () => {
+      const searchValue = await searchQuiz({ searchContent: debounceQuery });
+      setExamList(searchValue || []);
+    })();
+  }, [debounceQuery]);
+
+  const handleSelectCate = async (e) => {
+    try {
+      const filterQuizbyCate = await filterQuizByCategory(e);
+      setExamList(filterQuizbyCate)
+    } catch (error) {
+      toast.error("Không lọc được dữ liệu", { toastId: 'fliter_quiz' });
+    }
+  };
   return (
     <>
-      <div className="w-full">
-        
+      <div className='w-full'>
+        <div className='flex w-full'>
+        <div className='w-[20%]'>
+          <div className='flex'>
+          <Icons.Funnel/>
+          <FormSelect
+            control={control}
+            name="category"
+            label='Danh sách danh mục'
+            options={categories}
+            onChange={handleSelectCate}
+            />
+          </div>
+          
+          </div>
+          <div className='w-[40%]'>
+          <Input
+            icon={<Icons.Search />}
+            placeholder="Tìm kiếm theo tên bài tập"
+            value={searchKeywords}
+            onChange={handleInputChange}
+            className='mt-5 ml-10'
+          />
+          </div>
+         
+        </div>
+
         <ExamList category={categories} />
       </div>
 

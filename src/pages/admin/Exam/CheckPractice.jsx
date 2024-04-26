@@ -79,7 +79,6 @@ export default function CheckPractice() {
         const selectedOptions = answers.find(answer => answer.questionId === ques.id)?.selectedOptions || [];
         
         const selectedString = selectedOptions.sort().toString();
-  
         const correctString = correctAnswers.sort().toString();
         
         if(selectedOptions.length > 1){
