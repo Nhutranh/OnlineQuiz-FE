@@ -14,6 +14,7 @@ export default function CheckPractice() {
   const [answers, setAnswers] = useState([]);
   const [checkAnswer, setCheckAnswer] = useState([]);
   const [hasAnsweredAll, setHasAnsweredAll] = useState(false);// check còn câu nào chưa chọn thì thông báo
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -89,9 +90,11 @@ export default function CheckPractice() {
        
       })
       setCheckAnswer(result)
+      setIsSubmitted(true)
     } else {
       toast.error('Vui lòng chọn ít nhất một đáp án cho mỗi câu hỏi.', { toastId: 'select_answer' });
     }
+    
     
   };
   
@@ -128,6 +131,7 @@ export default function CheckPractice() {
                   <input
                     type={item.questionType.alias === 'single_choice' ? 'radio' : 'checkbox'}
                     name={`answer_${index}`}
+                    disabled={isSubmitted}
                     checked={answers[index]?.selectedOptions?.includes(ans.id)}
                     onChange={() => handleAnswer(item, ans.id)}
                     className='mt-3'

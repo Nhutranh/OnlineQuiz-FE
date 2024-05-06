@@ -7,7 +7,7 @@ import Icons from '~/assets/icons';
 import { FormInput, FormModalWarpper } from '~/components';
 import { FormSignUpInput } from '~/validations';
 
-export default function FormCreateAccoutAdmin({ onCancel, className, onClose }) {
+export default function FormCreateAccoutAdmin({ onCancel, className }) {
   const {
     control,
     formState: { errors },
@@ -26,7 +26,7 @@ export default function FormCreateAccoutAdmin({ onCancel, className, onClose }) 
       }
       await createAccoutAdmin(body);
       toast.success('Tạo tài khoản thành công', { toastId: 'create_accout' });
-      onClose()
+      oncancel()
     } catch (error) {
       toast.error('Có lỗi xảy ra', { toastId: 'fail_create_accout' });
     } 
@@ -85,6 +85,6 @@ export default function FormCreateAccoutAdmin({ onCancel, className, onClose }) 
 
 FormCreateAccoutAdmin.propTypes = {
   onCancel: PropTypes.func.isRequired,
-  onClose: PropTypes.func,
+  //onClose: PropTypes.func,
   className: PropTypes.string,
 };

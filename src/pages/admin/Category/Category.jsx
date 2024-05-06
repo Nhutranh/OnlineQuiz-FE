@@ -5,6 +5,7 @@ import { deleteCategoryById, getAllCategories, searchCategory } from '~/apis';
 import Icons from '~/assets/icons';
 import { Button, DialogComfirm, Input, Loading } from '~/components';
 import { useDebounce } from '~/hooks';
+import FormUpsertCategoryModal from './components/FormUpsertCategoryModal';
 
 function Category() {
   const [searchKeywords, setSearchKeywords] = useState('');
@@ -74,7 +75,7 @@ function Category() {
         <table className="block w-full text-sm text-left rtl:text-right border-collapse">
           <thead className="text-[#3b3e66] uppercase text-xs block w-full">
             <tr className="bg-[#d1d2de] rounded-ss rounded-se w-full flex items-center text-xs">
-              <th className="p-3 w-[5%] flex-shrink-0">Code</th>
+              <th className="p-3 w-[5%] flex-shrink-0">Mã</th>
               <th className="p-3 flex-shrink-0 w-[25%]">Danh mục</th>
               <th className="p-3 flex-auto">Mô tả</th>
               <th className="p-3 flex-shrink-0 w-[15%]">Thời gian</th>
@@ -148,7 +149,7 @@ function Category() {
             className="md:max-w-[500px]"
           />
         )}
-        {/* {openModal && (
+        {openModal && (
           <FormUpsertCategoryModal
             isEditing={openModal === 'edit'}
             data={openModal === 'edit' ? targetValue : null}
@@ -174,7 +175,7 @@ function Category() {
             }}
             className="md:max-w-3xl "
           />
-        )} */}
+        )}
       </div>
     </>
   );

@@ -3,7 +3,9 @@ import Icons from '~/assets/icons';
 const router = {
   root: '/',
   student: '/student',
-  practice: '/student/practice',
+  excises: '/student/excises',
+  history: '/student/history',
+  startQuiz: "/student/startQuiz",
   admin: '/admin',
   studentList: '/admin/students',
   question: '/admin/question',
@@ -53,6 +55,11 @@ export const StudentNavLinks = [
     path: `${router.student}/excises`,
     name: 'Luyện tập',
     icon: <Icons.BookOpen />,
+  },
+  {
+    path: router.history,
+    name: 'Lịch sử',
+    icon: <Icons.DownArrow />,
   },
 ];
 

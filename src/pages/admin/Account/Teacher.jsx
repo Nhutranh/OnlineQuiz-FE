@@ -116,7 +116,7 @@ function Account() {
         />
       )}
       {isCreating && (
-          <FormCreateAccoutAdmin onCancel={() => setIsCreating(false)} onClose={() => setIsCreating(false)} className="md:max-w-3xl " />
+          <FormCreateAccoutAdmin onCancel={() => setIsCreating(false)} className="md:max-w-3xl " />
         )}
     </div>
   );

@@ -34,9 +34,6 @@ export default function ExamList({ category }) {
   return (
     <div>
       <div className="flex justify-end mb-5">
-        <div className="flex items-center space-x-2">
-       
-        </div>
         <Button
           className="w-[150px] flex ml-10 px-5 py-2 text-sm text-white bg-primary shadow-success hover:shadow-success_hover"
           onClick={handleCreateExam}

@@ -17,7 +17,7 @@ export default function ExamStudent({list}) {
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
       <div className="pb-4 bg-white rounded-md">
-        <div className="max-h-[500px] overflow-y-auto flex flex-wrap">
+        <div className="h-full overflow-y-auto flex flex-wrap">
         {list.map((exam) => (
             <div key={exam.id}>
               <div className=" border-2 h-[160px] w-[280px] items-center justify-between p-2 m-3 rounded-lg shadow-md bg-slate-50 hover:shadow-lg hover:scale-105 transition-transform duration-300">
@@ -39,7 +39,7 @@ export default function ExamStudent({list}) {
                     </p>
                     <p className="text-[14px] flex">Điểm:  {exam.maxMarks}</p>
                     <Link
-                      to={`checkpractice/${exam.id}`}
+                      to={`startQuiz/${exam.id}`}
                       className="px-6 py-1 text-sm text-white bg-primary shadow-success hover:shadow-success_hover rounded-md"
                     >
                       Làm bài

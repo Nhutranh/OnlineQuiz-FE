@@ -1,4 +1,4 @@
-export { default as BodyExercise } from './BodyExercise';
+
 export { default as ExamList } from './ExamList';
 export { default as FormCreateExam } from './FormCreateExam';
 export { default as ViewDetailExam } from './DetailExam';

@@ -92,7 +92,7 @@ function ExamWrapper() {
   return (
     <>
       <div className='w-full'>
-        <div className='flex w-full'>
+        <div className='flex w-full mb-2'>
         <div className='w-[20%]'>
           <div className='flex'>
           <Icons.Funnel/>
@@ -112,12 +112,11 @@ function ExamWrapper() {
             placeholder="Tìm kiếm theo tên bài tập"
             value={searchKeywords}
             onChange={handleInputChange}
-            className='mt-5 ml-10'
+            className='mt-5 ml-[100%]'
           />
           </div>
          
         </div>
-
         <ExamList category={categories} />
       </div>
 

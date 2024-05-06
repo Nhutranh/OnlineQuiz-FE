@@ -8,7 +8,7 @@ import { CategorySchema } from '~/validations';
 
 export default function FormUpsertCategoryModal({
   isEditing,
-  data,
+  //data,
   onCancel,
   className,
   onSuccess,
@@ -20,10 +20,10 @@ export default function FormUpsertCategoryModal({
   } = useForm({
     mode: 'onSubmit',
     resolver: zodResolver(CategorySchema),
-    defaultValues: {
-      title: data.title || '',
-      description: data.description || '',
-    },
+    // defaultValues: {
+    //   title: data.title || '',
+    //   description: data.description || '',
+    // },
   });
 
   const onSubmit = async (data) => {
