@@ -35,7 +35,6 @@ function QuestionWrapper() {
 
   const debounceQuery = useDebounce(searchKeywords, 200);
 
- 
   useEffect(() => {
     (async () => {
       const searchValue = await searchQues({ searchContent: debounceQuery });
@@ -60,20 +59,17 @@ function QuestionWrapper() {
   return (
     <>
       <div className="w-full">
-        <div className="flex items-center w-full justify-between">
-        <Input
-        icon={<Icons.Search />}
-        placeholder="Tìm kiếm theo nội dung câu hỏi"
-        value={searchKeywords}
-        onChange={(e) => setSearchKeywords(e.target.value)}
-        className="md:max-w-[450px] flex-0 m-3"
-    />
-          <div />
+        <div className="flex items-center w-full justify-between mb-5">
+          <Input
+            icon={<Icons.Search />}
+            placeholder="Tìm kiếm theo nội dung câu hỏi"
+            value={searchKeywords}
+            onChange={(e) => setSearchKeywords(e.target.value)}
+            className="md:max-w-[450px]"
+          />
           <CreateQuestionModal />
         </div>
-        <div className="mt-4 w-full h-[calc(100%-4rem)]">
-          <QuestionTable />
-        </div>
+        <QuestionTable />
       </div>
 
       {targetQuestion && modal && ModalFormObj[modal]}

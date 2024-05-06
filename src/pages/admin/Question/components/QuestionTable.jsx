@@ -11,15 +11,15 @@ const compiledConvert = compile({
 });
 
 function QuestionTable() {
-  const { questionList,  openModal, setTargetQuestion } = useQuestionStore((state) => state);
- 
+  const { questionList, openModal, setTargetQuestion } = useQuestionStore((state) => state);
+
   const handleOpenModal = ({ type, question }) => {
     setTargetQuestion(question);
     openModal(type);
   };
-  
+
   return (
-    <div className="mt-5 relative sm:rounded bg-white shadow-card w-full max-h-full overflow-hidden">
+    <div className="relative sm:rounded bg-white shadow-card w-full overflow-hidden">
       <table className="block w-full text-left rtl:text-right border-collapse">
         <thead className="text-[#3b3e66] uppercase block w-full text-xs">
           <tr className="bg-[#d1d2de] rounded-se w-full flex items-center text-xs">
@@ -31,7 +31,7 @@ function QuestionTable() {
             <th className="p-3 flex-shrink-0 w-[12%]">Hành động</th>
           </tr>
         </thead>
-        <tbody className="overflow-y-auto block h-[calc(100vh-12rem)] w-full">
+        <tbody className="overflow-y-auto block h-[calc(100vh-13rem)] w-full">
           {questionList && questionList.length > 0 ? (
             questionList.map((question) => (
               <tr
@@ -82,7 +82,6 @@ function QuestionTable() {
         </tbody>
       </table>
     </div>
-   
   );
 }
 
