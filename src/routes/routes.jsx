@@ -90,7 +90,16 @@ const routes = createBrowserRouter([
           },
           {
             path: 'history',
-            element: <ShowHistory />,
+            children: [
+              {
+                index: true,
+                element: <ShowHistory />,
+              },
+              {
+                path: 'startQuiz/:id',
+                element: <StartPractice />,
+              },
+            ],
           },
         ],
       },

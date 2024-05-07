@@ -37,7 +37,7 @@ export default function StartPractice() {
           questionId: question.id,
           selectedOptions: []
         })));
-        setTimeLeft(response.durationMinutes * 5)
+        setTimeLeft(response.durationMinutes * 60)
         
       } catch (error) {
         toast.error(error.message, { toastId: 'get_exam' });

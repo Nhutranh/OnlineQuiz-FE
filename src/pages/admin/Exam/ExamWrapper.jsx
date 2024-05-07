@@ -33,11 +33,7 @@ function ExamWrapper() {
   const [searchKeywords, setSearchKeywords] = useState('');
 
   const debounceQuery = useDebounce(searchKeywords, 200);
-
-
-  const {
-    control,
-  } = useForm();
+  const {control} = useForm();
 
   useEffect(() => {
     (async () => {
@@ -86,7 +82,7 @@ function ExamWrapper() {
       const filterQuizbyCate = await filterQuizByCategory(e);
       setExamList(filterQuizbyCate)
     } catch (error) {
-      toast.error("Không lọc được dữ liệu", { toastId: 'fliter_quiz' });
+      toast.error("Không có dữ liệu", { toastId: 'fliter_quiz' });
     }
   };
   return (
