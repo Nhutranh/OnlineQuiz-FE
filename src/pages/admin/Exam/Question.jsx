@@ -6,9 +6,8 @@ export default function Question({
   selectQues,
   onPointChange,
   listQuestion,
-   //point,
+  //point,
 }) {
-
   const compiledConvert = compile({
     limits: {
       ellipsis: ' ...',
@@ -35,41 +34,43 @@ export default function Question({
           </tr>
         </thead>
         <tbody className="overflow-y-auto block w-full">
-          {listQuestion.map((item, index) => (
-            <tr
-              onClick={() => handleSelect(item.id)}
-              key={item.id}
-              className="flex bg-slate-50 items-center border-b border-[#d1d2de] transition-all hover:bg-[#d1d2de] hover:bg-opacity-30 h-[45px] font-semibold text-[#3b3e66]"
-            >
-              <td className="p-3 flex flex-auto w-[60%]">
-                {index + 1}.{compiledConvert(item.content)}
-              </td>
-              <td className="p-3 flex-shrink-0 w-[20%]">{item.category?.title || '--'}</td>
-              <td className="p-3 flex-shrink-0 w-[10%]">
-                {selectQues.includes(item.id) && (
-                  <div>
-                    <input
-                      min="1"
-                      max="10"
-                      onClick={handlePoint}
-                      onChange={(e) => onPointChange(item.id, e.target.value)}
-                      className="h-[40px] w-[60px] border-2 shadow-lg rounded-md"
-                      type="number"
-                      name="point"
-                      required
-                    />
-                  </div>
-                )}
-              </td>
-              <td className="p-3 flex-shrink-0 w-[10%]">
-                {selectQues.includes(item.id) && (
-                  <div className="text-white ml-5 bg-primary rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0">
-                    <Icons.Check />
-                  </div>
-                )}
-              </td>
-            </tr>
-          ))}
+          {listQuestion.map((item, index) => {
+            return (
+              <tr
+                onClick={() => handleSelect(item.id)}
+                key={item.id}
+                className="flex bg-slate-50 items-center border-b border-[#d1d2de] transition-all hover:bg-[#d1d2de] hover:bg-opacity-30 h-[45px] font-semibold text-[#3b3e66]"
+              >
+                <td className="p-3 flex flex-auto w-[60%]">
+                  {index + 1}.{compiledConvert(item.content)}
+                </td>
+                <td className="p-3 flex-shrink-0 w-[20%]">{item.category?.title || '--'}</td>
+                <td className="p-3 flex-shrink-0 w-[10%]">
+                  {selectQues.includes(item.id) && (
+                    <div>
+                      <input
+                        min="1"
+                        max="10"
+                        onClick={handlePoint}
+                        onChange={(e) => onPointChange(item.id, e.target.value)}
+                        className="h-[40px] w-[60px] border-2 shadow-lg rounded-md"
+                        type="number"
+                        name="point"
+                        required
+                      />
+                    </div>
+                  )}
+                </td>
+                <td className="p-3 flex-shrink-0 w-[10%]">
+                  {selectQues.includes(item.id) && (
+                    <div className="text-white ml-5 bg-primary rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0">
+                      <Icons.Check />
+                    </div>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

@@ -27,7 +27,7 @@ function Category() {
         setLoading(false);
       }
     };
-  
+
     fetchCategories();
   }, [setCategories]);
 
@@ -44,7 +44,9 @@ function Category() {
       setCategories(categories.filter((category) => category.id !== targetValue.id));
       toast.success('Xóa danh mục thành công', { toastId: 'delete_category' });
     } catch (error) {
-      toast.error('Không thể xóa danh mục này', { toastId: 'delete_category' });
+      toast.error('Danh mục đang được sử dụng, không thể xóa !', {
+        toastId: 'fail_delete_category',
+      });
     } finally {
       setTargetValue(null);
     }
@@ -110,15 +112,6 @@ function Category() {
                       : '--'}
                   </td>
                   <td className="p-3 flex-shrink-0 w-[15%] flex items-center justify-center">
-                    {/* <Button
-                      onClick={() => {
-                        setOpenModal('edit');
-                        setTargetValue(category);
-                      }}
-                      className="text-xs rounded px-2 py-1 text-blue-500 hover:bg-blue-200 hover:bg-opacity-40"
-                    >
-                      <Icons.Pencil />
-                    </Button> */}
                     <Button
                       onClick={() => setTargetValue(category)}
                       className="text-xs border border-danger rounded px-2 py-1 text-danger hover:bg-red-200 hover:bg-opacity-40"

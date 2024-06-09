@@ -91,7 +91,6 @@ function ExamWrapper() {
         <div className='flex w-full mb-2'>
         <div className='w-[20%]'>
           <div className='flex'>
-          <Icons.Funnel/>
           <FormSelect
             control={control}
             name="category"

@@ -4,7 +4,7 @@ import { Button, FormInput, TextView } from '~/components';
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { getQuesOfQuiz, getQuestions, updateQuiz } from '~/apis';
+import { getQuesOfQuiz, updateQuiz } from '~/apis';
 import { useExamStore, useQuestionStore } from '~/store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormExamCreateSchema } from '~/validations/exam';
@@ -19,7 +19,7 @@ const FormEditExam = () => {
   const [containerQues, setContainerQues] = useState([]);
   const [quesOfQuiz, setQuesOfQuiz] = useState([]);
   const { targetExam, setTargetExam, openModal, updateExam } = useExamStore((state) => state);
-  const { questionList, setQuestionList } = useQuestionStore((state) => state);
+  const { questionList } = useQuestionStore((state) => state);
 
   const compiledConvert = compile({
     limits: {
@@ -30,31 +30,32 @@ const FormEditExam = () => {
   const [totalPoints, setTotalPoints] = useState(0);
   //tính điểm
   useEffect(() => {
-    const points = quesPoint.map(element => parseInt(element.point)).reduce((acc, curr) => acc + curr, 0);
-    setTotalPoints(points)
+    const points = quesPoint
+      .map((element) => parseInt(element.point))
+      .reduce((acc, curr) => acc + curr, 0);
+    setTotalPoints(points);
   }, [quesPoint]);
 
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const listQuestion = await getQuestions();
-        setQuestionList(listQuestion);
-      } catch (error) {
-        toast.error(error.message, { toastId: 'fetch_question' });
-      }
-    })();
-  }, [setQuestionList]);
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const listQuestion = await getQuestions();
+  //       console.log('BBB', listQuestion);
+  //       setQuestionList(listQuestion);
+  //     } catch (error) {
+  //       toast.error(error.message, { toastId: 'fetch_question' });
+  //     }
+  //   })();
+  // }, [setQuestionList]);
 
   useEffect(() => {
     (async () => {
       try {
         const response = await getQuesOfQuiz(targetExam.id);
-        console.log('RES', response);
         if (response) {
-          setQuesOfQuiz(response);
+          setQuesOfQuiz(response); //point
           const cloneQuesList = [...questionList];
-          setContainerQues(cloneQuesList.filter((q) => q.category.id === targetExam.category.id));
+          setContainerQues(cloneQuesList.filter((q) => q.category.id === targetExam.category.id)); //listQues
           setSelectedQuestions(response.map((q) => q.id));
         }
       } catch (error) {
@@ -91,10 +92,6 @@ const FormEditExam = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(selectedQuestions);
-  }, [selectedQuestions]);
-
   const handleChooseFromBank = () => {
     setShowQuestionList(true);
   };
@@ -127,6 +124,10 @@ const FormEditExam = () => {
 
   const handlePointsChange = (id, value) => {
     setQuesPoint((prev) => {
+      if (value < 1 || value > 10) {
+        toast.error('Giá trị điểm chỉ từ 1 đến 10!', { toastId: 'fail_point' });
+      }
+
       const foundPoint = prev.find((p) => p.id === id);
       if (!foundPoint) {
         return [...prev, { id, point: value }];
@@ -183,27 +184,26 @@ const FormEditExam = () => {
                 />
                 {showQuestionList ? (
                   <div className="mt-5">
-                  <span className="text-sm font-bold text-icon mb-1">Điểm của bài tập</span>
-                  <TextView
-                    control={control}
-                    value={totalPoints}
-                    className='text-sm border rounded-md'
-                  />
-                </div>
+                    <span className="text-sm font-bold text-icon mb-1">Điểm của bài tập</span>
+                    <TextView
+                      control={control}
+                      value={totalPoints}
+                      className="text-sm border rounded-md"
+                    />
+                  </div>
                 ) : (
                   <div className="mt-5">
-                  <FormInput
-                    control={control}
-                    name="point"
-                    title="Điểm cho bài tập"
-                    required
-                    disabled
-                  />
-                </div>
+                    <FormInput
+                      control={control}
+                      name="point"
+                      title="Điểm cho bài tập"
+                      required
+                      disabled
+                    />
+                  </div>
                 )}
-                
               </div>
-              
+
               <div className="m-3 w-[50%]">
                 <FormInput
                   control={control}
@@ -231,7 +231,6 @@ const FormEditExam = () => {
             <div className="mb-4">
               <div className="flex text-sm">
                 <span className="text-sm font-semibold mb-2 mr-5">Danh sách câu hỏi</span>
-                
               </div>
               <div className="bg-gray-200 w-full rounded-md">
                 <div className="max-h-[500px] overflow-y-auto">
