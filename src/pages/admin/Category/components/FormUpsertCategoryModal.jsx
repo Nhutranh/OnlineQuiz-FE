@@ -35,6 +35,8 @@ export default function FormUpsertCategoryModal({
       onSuccess(res);
     } catch (error) {
       toast.error('Có lỗi xảy ra', { toastId: 'upsert_category' });
+    } finally {
+      onCancel();
     }
   };
 

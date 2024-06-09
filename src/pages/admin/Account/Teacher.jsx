@@ -38,10 +38,17 @@ function Account() {
     }
   };
 
+  const newAccount = (result) => {
+    setAccounts((a) => [...a, result]);
+  };
+
   return (
     <div className="w-full">
       <div className="w-full flex items-center justify-end mb-4">
-        <Button onClick={() => setIsCreating(true)} className="flex items-center gap-x-2 px-4 py-2 text-sm text-white bg-primary shadow-success hover:shadow-success_hover">
+        <Button
+          onClick={() => setIsCreating(true)}
+          className="flex items-center gap-x-2 px-4 py-2 text-sm text-white bg-primary shadow-success hover:shadow-success_hover"
+        >
           <Icons.Plus />
           <p>Thêm mới</p>
         </Button>
@@ -116,8 +123,12 @@ function Account() {
         />
       )}
       {isCreating && (
-          <FormCreateAccoutAdmin onCancel={() => setIsCreating(false)} className="md:max-w-3xl " />
-        )}
+        <FormCreateAccoutAdmin
+          onCancel={() => setIsCreating(false)}
+          onsubmit={newAccount}
+          className="md:max-w-3xl "
+        />
+      )}
     </div>
   );
 }

@@ -7,7 +7,7 @@ import Icons from '~/assets/icons';
 import { FormInput, FormModalWarpper } from '~/components';
 import { FormSignUpInput } from '~/validations';
 
-export default function FormCreateAccoutAdmin({ onCancel, className }) {
+export default function FormCreateAccoutAdmin({ onCancel, className, onsubmit }) {
   const {
     control,
     formState: { errors },
@@ -23,13 +23,15 @@ export default function FormCreateAccoutAdmin({ onCancel, className }) {
         fullName: data.fullName,
         email: data.email,
         password: data.password,
-      }
-      await createAccoutAdmin(body);
+      };
+      const result = await createAccoutAdmin(body);
+      onsubmit(result);
       toast.success('Tạo tài khoản thành công', { toastId: 'create_accout' });
-      oncancel()
     } catch (error) {
       toast.error('Có lỗi xảy ra', { toastId: 'fail_create_accout' });
-    } 
+    } finally {
+      onCancel();
+    }
   };
 
   return (
@@ -48,8 +50,8 @@ export default function FormCreateAccoutAdmin({ onCancel, className }) {
         type="text"
         icon={<Icons.User />}
         error={errors.fullName?.message}
-        />
-        <FormInput
+      />
+      <FormInput
         control={control}
         title="Địa chỉ Email"
         name="email"
@@ -58,8 +60,8 @@ export default function FormCreateAccoutAdmin({ onCancel, className }) {
         type="text"
         icon={<Icons.Email />}
         error={errors.email?.message}
-        />
-        <FormInput
+      />
+      <FormInput
         control={control}
         title="Mật khẩu"
         name="password"
@@ -68,8 +70,8 @@ export default function FormCreateAccoutAdmin({ onCancel, className }) {
         type={'password'}
         icon={<Icons.Key />}
         error={errors.password?.message}
-        />
-        <FormInput
+      />
+      <FormInput
         control={control}
         title="Xác nhận mật khẩu"
         name="confirmPassword"
@@ -78,13 +80,13 @@ export default function FormCreateAccoutAdmin({ onCancel, className }) {
         type={'password'}
         icon={<Icons.Key />}
         error={errors.confirmPassword?.message}
-        />
+      />
     </FormModalWarpper>
   );
 }
 
 FormCreateAccoutAdmin.propTypes = {
   onCancel: PropTypes.func.isRequired,
-  //onClose: PropTypes.func,
   className: PropTypes.string,
+  onsubmit: PropTypes.func,
 };

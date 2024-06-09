@@ -47,8 +47,6 @@ function Category() {
       toast.error('Danh mục đang được sử dụng, không thể xóa !', {
         toastId: 'fail_delete_category',
       });
-    } finally {
-      setTargetValue(null);
     }
   };
 

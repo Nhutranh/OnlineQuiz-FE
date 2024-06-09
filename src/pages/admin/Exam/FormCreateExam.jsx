@@ -29,12 +29,11 @@ const FormCreateExam = ({ onClose, cate }) => {
 
   //tính điểm
   useEffect(() => {
-    const points = quesPoint.map(element => parseInt(element.point)).reduce((acc, curr) => acc + curr, 0);
-    setTotalPoints(points)
+    const points = quesPoint
+      .map((element) => parseInt(element.point))
+      .reduce((acc, curr) => acc + curr, 0);
+    setTotalPoints(points);
   }, [quesPoint]);
-
-  
-
 
   const handleQuestionSelect = (questionID) => {
     if (selectedQuestions && selectedQuestions.includes(questionID)) {
@@ -74,8 +73,6 @@ const FormCreateExam = ({ onClose, cate }) => {
           marksOfQuestion: parseInt(q.point) || 0,
         })),
       };
-      console.log("BODY", body)
-
       const response = await createExam(body);
 
       if (response) {
@@ -145,7 +142,7 @@ const FormCreateExam = ({ onClose, cate }) => {
                   <TextView
                     control={control}
                     value={totalPoints}
-                    className='text-sm border rounded-md'
+                    className="text-sm border rounded-md"
                   />
                 </div>
               </div>
