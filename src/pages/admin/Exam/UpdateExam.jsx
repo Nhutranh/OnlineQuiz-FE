@@ -36,18 +36,6 @@ const FormEditExam = () => {
     setTotalPoints(points);
   }, [quesPoint]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const listQuestion = await getQuestions();
-  //       console.log('BBB', listQuestion);
-  //       setQuestionList(listQuestion);
-  //     } catch (error) {
-  //       toast.error(error.message, { toastId: 'fetch_question' });
-  //     }
-  //   })();
-  // }, [setQuestionList]);
-
   useEffect(() => {
     (async () => {
       try {
