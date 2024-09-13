@@ -8,6 +8,8 @@ import UpdateExam from './UpdateExam';
 import DeleteExam from './DeleteExam';
 import ExamList from './ExamList';
 import { useState } from 'react';
+import { useContext } from 'react';
+import { AppContext } from '~/useContext/AppContext';
 const ModalFormObj = {
   ['view']: (
     <Backdrop opacity={0.25}>
@@ -43,6 +45,7 @@ function ExamWrapper() {
   // }, [setExamList]);
 
   const [categories, setCategories] = useState([]);
+  const { setCate } = useContext(AppContext);
   useEffect(() => {
     (async () => {
       try {
@@ -55,12 +58,18 @@ function ExamWrapper() {
               value: category.id,
             }))
           );
+          setCate(
+            listCategories.map((category) => ({
+              display: category.title,
+              value: category.id,
+            }))
+          );
         }
       } catch (error) {
         toast.error(error.message, { toastId: 'fetch_question' });
       }
     })();
-  }, []);
+  }, [setCate]);
 
   // const handleInputChange = (e) => {
   //   setSearchKeywords(e.target.value);

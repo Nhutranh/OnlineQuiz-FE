@@ -1,7 +1,7 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom';
 import { AuthLayout, DashBoardLayout } from '~/layouts';
 import NotFound from '~/pages/NotFound';
-import { CheckPractice } from '~/pages/admin/Exam';
+import { CheckPractice, DoneCreateExam, FormCreateExam } from '~/pages/admin/Exam';
 import ExamWrapper from '~/pages/admin/Exam/ExamWrapper';
 import { Overview, QuestionWarehouse, Category, Teachers, Trainees } from '~/pages/admin';
 import { SignInPage, SignUpPage } from '~/pages/auth';
@@ -39,11 +39,19 @@ const routes = createBrowserRouter([
               },
               {
                 path: 'checkpractice/:id',
-                element: <CheckPractice/>,
+                element: <CheckPractice />,
               },
             ],
           },
-         
+          {
+            path: 'exam/createExam',
+            element: <FormCreateExam />,
+          },
+          {
+            path: 'exam/doneCreateExam',
+            element: <DoneCreateExam />,
+          },
+
           {
             path: 'students',
             children: [
@@ -105,8 +113,6 @@ const routes = createBrowserRouter([
       },
     ],
   },
-
- 
 
   // Auth Route
   {

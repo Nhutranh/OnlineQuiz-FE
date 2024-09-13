@@ -13,6 +13,8 @@ const router = {
   teacher: '/admin/teachers',
   exam: '/admin/exam',
   checkpractice: '/admin/checkpractice',
+  createExam: '/admin/createExam',
+  doneCreateExam: '/admin/createExam/doneCreateExam',
   signIn: '/auth/sign-in',
   signUp: '/auth/sign-up',
 };

@@ -1,18 +1,22 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { Button, FormInput, FormSelect, TextView } from '~/components';
-import PropTypes from 'prop-types';
+import { Button, FormInput, FormSelect } from '~/components';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { createExam, getQuestions } from '~/apis';
-import Icons from '~/assets/icons';
-import { useExamStore, useQuestionStore } from '~/store';
+import { getQuestions } from '~/apis';
+import { useQuestionStore } from '~/store';
 import Question from './Question';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormExamCreateSchema } from '~/validations/exam';
+import { useContext } from 'react';
+import { AppContext } from '~/useContext/AppContext';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const FormCreateExam = ({ onClose, cate }) => {
-  const { addNewExam } = useExamStore((state) => state);
+const FormCreateExam = () => {
+  const { cate } = useContext(AppContext);
+  const navigate = useNavigate();
+  //const { addNewExam } = useExamStore((state) => state);
   const { questionList, setQuestionList } = useQuestionStore((state) => state);
   const {
     control,
@@ -23,25 +27,26 @@ const FormCreateExam = ({ onClose, cate }) => {
   });
   const [showQuestionList, setShowQuestionList] = useState(false);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
-  const [quesPoint, setQuesPoint] = useState([]); // chứa quesID + Point
+  //const [quesPoint, setQuesPoint] = useState([]); // chứa quesID + Point
   const [containerQues, setContainerQues] = useState([]);
-  const [totalPoints, setTotalPoints] = useState(0);
+  //const [totalPoints, setTotalPoints] = useState(0);
 
   //tính điểm
-  useEffect(() => {
-    const points = quesPoint
-      .map((element) => parseInt(element.point))
-      .reduce((acc, curr) => acc + curr, 0);
-    setTotalPoints(points);
-  }, [quesPoint]);
+  // useEffect(() => {
+  //   const points = quesPoint
+  //     .map((element) => parseInt(element.point))
+  //     .reduce((acc, curr) => acc + curr, 0);
+  //   setTotalPoints(points);
+  // }, [quesPoint]);
 
-  const handleQuestionSelect = (questionID) => {
-    if (selectedQuestions && selectedQuestions.includes(questionID)) {
-      setSelectedQuestions(selectedQuestions.filter((id) => id !== questionID));
+  const handleQuestionSelect = (question) => {
+    if (selectedQuestions && selectedQuestions.includes(question)) {
+      setSelectedQuestions(selectedQuestions.filter((id) => id !== question));
     } else {
-      setSelectedQuestions([...selectedQuestions, questionID]);
+      setSelectedQuestions([...selectedQuestions, question]);
     }
   };
+  console.log(selectedQuestions);
 
   const handleChooseFromBank = () => {
     setShowQuestionList(true);
@@ -61,41 +66,47 @@ const FormCreateExam = ({ onClose, cate }) => {
 
   const handleFormSubmit = async (data) => {
     try {
-      console.log(quesPoint);
+      if (selectedQuestions.length === 0) {
+        toast.error('Bạn cần chọn ít nhất 1 câu hỏi cho bài tập', {
+          toastId: 'ít_nhất_một_câu_hỏi',
+        });
+        return;
+      }
       const body = {
         title: data.examName,
         categoryId: data.category,
         description: data.description,
-        maxMarks: totalPoints,
         durationMinutes: data.time,
-        listQuestion: quesPoint.map((q) => ({
-          questionId: q.id,
-          marksOfQuestion: parseInt(q.point) || 0,
-        })),
+        listQuestion: selectedQuestions,
+        // listQuestion: quesPoint.map((q) => ({
+        //   questionId: q.id,
+        //   marksOfQuestion: parseInt(q.point) || 0,
+        // })),
       };
-      const response = await createExam(body);
 
-      if (response) {
-        addNewExam(response);
-        toast.success('Tạo mới bài tập thành công', { toastId: 'create_exam' });
-        onClose();
-      }
+      navigate('/admin/exam/doneCreateExam', { state: { examData: body } });
+      //const response = await createExam(body);
+
+      // if (response) {
+      //   addNewExam(response);
+      //   toast.success('Tạo mới bài tập thành công', { toastId: 'create_exam' });
+      // }
     } catch (error) {
-      toast.error(error.message, { toastId: 'create_exam' });
+      toast.error(error.message, { toastId: 'data_exam' });
     }
   };
 
-  const handlePointsChange = (id, value) => {
-    setQuesPoint((prev) => {
-      const foundPoint = prev.find((p) => p.id === id);
-      if (!foundPoint) {
-        return [...prev, { id, point: value }];
-      } else {
-        foundPoint.point = value;
-        return [...prev];
-      }
-    });
-  };
+  // const handlePointsChange = (id, value) => {
+  //   setQuesPoint((prev) => {
+  //     const foundPoint = prev.find((p) => p.id === id);
+  //     if (!foundPoint) {
+  //       return [...prev, { id, point: value }];
+  //     } else {
+  //       foundPoint.point = value;
+  //       return [...prev];
+  //     }
+  //   });
+  // };
 
   const handleCategoryForFilter = (e) => {
     const cloneQuesList = [...questionList];
@@ -103,12 +114,12 @@ const FormCreateExam = ({ onClose, cate }) => {
   };
 
   return (
-    <div className="flex items-center justify-center pt-6">
-      <div className="container mx-auto p-4 bg-slate-100 rounded-md w-[1000px]">
-        <h3 className="mb-5">Tạo bài tập</h3>
+    <div className="w-full">
+      <div className="p-4 bg-slate-50 rounded-md ">
+        <h3 className="mb-5">Thông tin bài tập</h3>
         <form onSubmit={handleSubmit(handleFormSubmit)} className="w-full">
-          <div className="flex flex-wrap -mx-3 mb-4">
-            <div className="w-full flex px-3">
+          <div className="flex flex-wrap -mx-3">
+            <div className="w-full flex px-2">
               <div className="m-3 w-[50%]">
                 <FormInput
                   control={control}
@@ -139,11 +150,11 @@ const FormCreateExam = ({ onClose, cate }) => {
                 />
                 <div className="mt-5">
                   <span className="text-sm font-bold text-icon mb-1">Điểm của bài tập</span>
-                  <TextView
+                  {/* <TextView
                     control={control}
                     value={totalPoints}
                     className="text-sm border rounded-md"
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="m-3 w-[50%]">
@@ -157,27 +168,28 @@ const FormCreateExam = ({ onClose, cate }) => {
               </div>
             </div>
 
-            <div>
+            <div className="flex">
               <Button
                 type="button"
                 onClick={handleChooseFromBank}
                 className="border border-gray-500 p-2 ml-3 flex text-sm"
               >
-                Chọn câu hỏi <Icons.DownArrow />
+                Chọn câu hỏi <p className="text-blue-500 ml-1"> tại đây</p>
               </Button>
             </div>
           </div>
 
           {showQuestionList && (
-            <div className="mb-4">
+            <div className="mb-4 px-2">
               <div className="flex text-sm">
-                <span className="text-sm font-semibold mb-2 mr-5">Danh sách câu hỏi</span>
-                <span className="text-sm font-semibold mb-2 mr-5">Số câu đã chọn: </span>
+                <span className="text-sm font-semibold mb-2">
+                  Số câu đã chọn: {selectedQuestions.length}
+                </span>
               </div>
               <div className="bg-gray-400 w-full rounded-md">
                 <div className="max-h-[500px] overflow-y-auto">
                   <Question
-                    onPointChange={handlePointsChange}
+                    // onPointChange={handlePointsChange}
                     selectQues={selectedQuestions}
                     onQuestionSelect={handleQuestionSelect}
                     listQuestion={containerQues}
@@ -192,15 +204,21 @@ const FormCreateExam = ({ onClose, cate }) => {
               type="submit"
               className="px-6 py-2 text-sm text-white bg-primary shadow-success hover:shadow-success_hover"
             >
-              Tạo bài tập
+              Tiếp tục
             </Button>
-            <Button
-              type="button"
-              onClick={onClose}
-              className="px-6 ml-5 py-2 text-sm !border border-solid !border-danger text-danger hover:bg-danger hover:bg-opacity-5"
+            {/* <Link
+              type="submit"
+              to="/admin/exam/doneCreateExam"
+              className="px-6 py-2 text-sm rounded-md text-white bg-primary shadow-success hover:shadow-success_hover"
             >
-              Hủy
-            </Button>
+              Tiếp tục
+            </Link> */}
+            <Link
+              to="/admin/exam"
+              className="px-6 ml-5 py-2 text-sm rounded-md !border border-solid !border-danger text-danger hover:bg-danger hover:bg-opacity-5"
+            >
+              Thoát
+            </Link>
           </div>
         </form>
       </div>
@@ -210,7 +228,7 @@ const FormCreateExam = ({ onClose, cate }) => {
 
 export default FormCreateExam;
 
-FormCreateExam.propTypes = {
-  onClose: PropTypes.func,
-  cate: PropTypes.array.isRequired,
-};
+// FormCreateExam.propTypes = {
+//   onClose: PropTypes.func,
+//   cate: PropTypes.array.isRequired,
+// };

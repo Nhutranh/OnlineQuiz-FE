@@ -19,7 +19,7 @@ export default function QuestionDelete() {
         toast.success('Xóa câu hỏi thành công', { toastId: 'delete_question' });
       }
     } catch (error) {
-      toast.error(error.message, { toastId: 'delete_question' });
+      toast.error('Câu hỏi đang được sử dụng, không thể xóa!', { toastId: 'delete_question' });
     }
   };
 

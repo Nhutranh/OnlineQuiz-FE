@@ -1,6 +1,5 @@
-import { Backdrop, Button, FormSelect, Input } from '~/components';
+import { Button, FormSelect, Input } from '~/components';
 import { useState } from 'react';
-import FormCreateExam from './FormCreateExam';
 import Icons from '~/assets/icons';
 import { useExamStore } from '~/store';
 import Bookmark from '~/assets/icons/Bookmark';
@@ -14,9 +13,8 @@ import { useEffect } from 'react';
 import { filterQuizByCategory, getAllCategories, getExams, searchQuiz } from '~/apis';
 import { toast } from 'react-toastify';
 
-export default function ExamList({ category }) {
+export default function ExamList() {
   const { examList, setExamList, setTargetExam, openModal } = useExamStore((state) => state);
-  const [isCreatingExam, setIsCreatingExam] = useState(false);
   const { control } = useForm();
 
   const [searchKeywords, setSearchKeywords] = useState('');
@@ -27,10 +25,6 @@ export default function ExamList({ category }) {
       ellipsis: ' ...',
     },
   });
-
-  const handleCreateExam = () => {
-    setIsCreatingExam(true);
-  };
 
   const handleInputChange = (e) => {
     setSearchKeywords(e.target.value);
@@ -101,7 +95,7 @@ export default function ExamList({ category }) {
             className="w-[70%] px-3"
           />
         </div>
-        <div className="col-span-5 px-3">
+        <div className="col-span-5 px-3 mt-5">
           <Input
             icon={<Icons.Search />}
             placeholder="Tìm kiếm theo tên bài tập"
@@ -109,14 +103,21 @@ export default function ExamList({ category }) {
             onChange={handleInputChange}
           />
         </div>
-        <div className="col-span-2 px-3">
-          <Button
+        <div className="col-span-2 px-3 mt-6">
+          <Link
+            to="createExam"
+            className="w-[80%] rounded-lg justify-center flex px-5 py-2 text-sm text-white bg-primary shadow-success hover:shadow-success_hover"
+          >
+            <Icons.Plus />
+            Tạo bài tập
+          </Link>
+          {/* <Button
             className="w-[80%] justify-center flex px-5 py-2 text-sm text-white bg-primary shadow-success hover:shadow-success_hover"
             onClick={handleCreateExam}
           >
             <Icons.Plus />
             Tạo bài tập
-          </Button>
+          </Button> */}
         </div>
       </div>
 
@@ -174,11 +175,14 @@ export default function ExamList({ category }) {
           ))}
         </div>
       </div>
-      {isCreatingExam && (
+      {/* {isCreatingExam && (
         <Backdrop opacity={0.35} className="overflow-auto">
           <FormCreateExam cate={category} onClose={() => setIsCreatingExam(false)} />
         </Backdrop>
-      )}
+      )} */}
+      {/* {isCreatingExam && (
+        <FormCreateExam cate={category} onClose={() => setIsCreatingExam(false)} />
+      )} */}
     </div>
   );
 }

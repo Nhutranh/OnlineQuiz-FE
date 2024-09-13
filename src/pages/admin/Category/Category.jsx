@@ -43,6 +43,7 @@ function Category() {
       await deleteCategoryById(targetValue.id);
       setCategories(categories.filter((category) => category.id !== targetValue.id));
       toast.success('Xóa danh mục thành công', { toastId: 'delete_category' });
+      setTargetValue(null);
     } catch (error) {
       toast.error('Danh mục đang được sử dụng, không thể xóa !', {
         toastId: 'fail_delete_category',
