@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 const FormCreateExam = () => {
   const { cate } = useContext(AppContext);
   const navigate = useNavigate();
-  //const { addNewExam } = useExamStore((state) => state);
+
   const { questionList, setQuestionList } = useQuestionStore((state) => state);
   const {
     control,
@@ -27,17 +27,7 @@ const FormCreateExam = () => {
   });
   const [showQuestionList, setShowQuestionList] = useState(false);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
-  //const [quesPoint, setQuesPoint] = useState([]); // chứa quesID + Point
   const [containerQues, setContainerQues] = useState([]);
-  //const [totalPoints, setTotalPoints] = useState(0);
-
-  //tính điểm
-  // useEffect(() => {
-  //   const points = quesPoint
-  //     .map((element) => parseInt(element.point))
-  //     .reduce((acc, curr) => acc + curr, 0);
-  //   setTotalPoints(points);
-  // }, [quesPoint]);
 
   const handleQuestionSelect = (question) => {
     if (selectedQuestions && selectedQuestions.includes(question)) {
@@ -46,7 +36,6 @@ const FormCreateExam = () => {
       setSelectedQuestions([...selectedQuestions, question]);
     }
   };
-  console.log(selectedQuestions);
 
   const handleChooseFromBank = () => {
     setShowQuestionList(true);
@@ -78,35 +67,13 @@ const FormCreateExam = () => {
         description: data.description,
         durationMinutes: data.time,
         listQuestion: selectedQuestions,
-        // listQuestion: quesPoint.map((q) => ({
-        //   questionId: q.id,
-        //   marksOfQuestion: parseInt(q.point) || 0,
-        // })),
       };
 
       navigate('/admin/exam/doneCreateExam', { state: { examData: body } });
-      //const response = await createExam(body);
-
-      // if (response) {
-      //   addNewExam(response);
-      //   toast.success('Tạo mới bài tập thành công', { toastId: 'create_exam' });
-      // }
     } catch (error) {
       toast.error(error.message, { toastId: 'data_exam' });
     }
   };
-
-  // const handlePointsChange = (id, value) => {
-  //   setQuesPoint((prev) => {
-  //     const foundPoint = prev.find((p) => p.id === id);
-  //     if (!foundPoint) {
-  //       return [...prev, { id, point: value }];
-  //     } else {
-  //       foundPoint.point = value;
-  //       return [...prev];
-  //     }
-  //   });
-  // };
 
   const handleCategoryForFilter = (e) => {
     const cloneQuesList = [...questionList];
@@ -148,14 +115,6 @@ const FormCreateExam = () => {
                   options={cate}
                   onChange={handleCategoryForFilter}
                 />
-                <div className="mt-5">
-                  <span className="text-sm font-bold text-icon mb-1">Điểm của bài tập</span>
-                  {/* <TextView
-                    control={control}
-                    value={totalPoints}
-                    className="text-sm border rounded-md"
-                  /> */}
-                </div>
               </div>
               <div className="m-3 w-[50%]">
                 <FormInput
@@ -189,7 +148,6 @@ const FormCreateExam = () => {
               <div className="bg-gray-400 w-full rounded-md">
                 <div className="max-h-[500px] overflow-y-auto">
                   <Question
-                    // onPointChange={handlePointsChange}
                     selectQues={selectedQuestions}
                     onQuestionSelect={handleQuestionSelect}
                     listQuestion={containerQues}
@@ -206,13 +164,7 @@ const FormCreateExam = () => {
             >
               Tiếp tục
             </Button>
-            {/* <Link
-              type="submit"
-              to="/admin/exam/doneCreateExam"
-              className="px-6 py-2 text-sm rounded-md text-white bg-primary shadow-success hover:shadow-success_hover"
-            >
-              Tiếp tục
-            </Link> */}
+
             <Link
               to="/admin/exam"
               className="px-6 ml-5 py-2 text-sm rounded-md !border border-solid !border-danger text-danger hover:bg-danger hover:bg-opacity-5"
@@ -227,8 +179,3 @@ const FormCreateExam = () => {
 };
 
 export default FormCreateExam;
-
-// FormCreateExam.propTypes = {
-//   onClose: PropTypes.func,
-//   cate: PropTypes.array.isRequired,
-// };

@@ -12,10 +12,6 @@ export default function Question({ onQuestionSelect, selectQues, listQuestion })
     onQuestionSelect(questionID);
   };
 
-  // const handlePoint = (e) => {
-  //   e.stopPropagation();
-  // };
-
   return (
     <div className="w-full">
       <table className="block w-full text-sm text-left rtl:text-right border-collapse">
@@ -38,22 +34,7 @@ export default function Question({ onQuestionSelect, selectQues, listQuestion })
                   {index + 1}.{compiledConvert(item.content)}
                 </td>
                 <td className="p-3 flex-shrink-0 w-[30%]">{item.category?.title || '--'}</td>
-                {/* <td className="p-3 flex-shrink-0 w-[10%]">
-                  {selectQues.includes(item.id) && (
-                    <div>
-                      <input
-                        min="1"
-                        max="10"
-                        onClick={handlePoint}
-                        onChange={(e) => onPointChange(item.id, e.target.value)}
-                        className="h-[40px] w-[60px] border-2 shadow-lg rounded-md"
-                        type="number"
-                        name="point"
-                        required
-                      />
-                    </div>
-                  )}
-                </td> */}
+
                 <td className="p-3 flex-shrink-0 w-[10%]">
                   {selectQues.includes(item) && (
                     <div className="text-white ml-5 bg-primary rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0">
