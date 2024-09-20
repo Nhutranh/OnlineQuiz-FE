@@ -111,13 +111,6 @@ export default function ExamList() {
             <Icons.Plus />
             Tạo bài tập
           </Link>
-          {/* <Button
-            className="w-[80%] justify-center flex px-5 py-2 text-sm text-white bg-primary shadow-success hover:shadow-success_hover"
-            onClick={handleCreateExam}
-          >
-            <Icons.Plus />
-            Tạo bài tập
-          </Button> */}
         </div>
       </div>
 
@@ -175,14 +168,6 @@ export default function ExamList() {
           ))}
         </div>
       </div>
-      {/* {isCreatingExam && (
-        <Backdrop opacity={0.35} className="overflow-auto">
-          <FormCreateExam cate={category} onClose={() => setIsCreatingExam(false)} />
-        </Backdrop>
-      )} */}
-      {/* {isCreatingExam && (
-        <FormCreateExam cate={category} onClose={() => setIsCreatingExam(false)} />
-      )} */}
     </div>
   );
 }

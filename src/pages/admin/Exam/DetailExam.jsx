@@ -27,7 +27,7 @@ export default function ViewDetailExam() {
         toast.error(error);
       }
     })();
-  }, []);
+  }, [targetExam.id]);
 
   return (
     <div className="w-full h-full mx-auto max-w-5xl p-10 animate-fade-down animate-duration-500">
@@ -38,7 +38,7 @@ export default function ViewDetailExam() {
         <div className="flex-1 max-h-[700px] overflow-y-auto px-4">
           <div className="flex items-center justify-between w-full gap-x-5 mb-5">
             <div className="w-full flex flex-col gap-y-2">
-              <TextView value={targetExam.id} label="Mã bài tập" />
+              <TextView value={targetExam.id || '--'} label="Mã bài tập" />
               <TextView value={targetExam.title || '--'} label="Tiêu đề bài tập" />
             </div>
             <div className="w-full flex flex-col gap-y-2">
