@@ -10,8 +10,6 @@ export const updateQuiz = async (id, body) => await axiosClient.put(`/quiz/updat
 
 export const deleteQuiz = async (id) => await axiosClient.delete(`/quiz/delete/${id}`);
 
-export const getQuizOfCategory = async (id) => await axiosClient.get(`/quiz/category/${id}`);
-
 export const getQuizToStart = async (body) => await axiosClient.post('/take_exam/start-quiz', body);
 
 export const submitQuiz = async (body) => await axiosClient.post('/take_exam/submit', body);

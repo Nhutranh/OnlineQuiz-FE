@@ -1,63 +1,26 @@
-import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-import { Button, FormInput, TextView } from '~/components';
-import PropTypes from 'prop-types';
-import { useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { getQuesOfQuiz, updateQuiz } from '~/apis';
-import { useExamStore, useQuestionStore } from '~/store';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Button, FormInput, TextView } from '~/components';
 import { FormExamCreateSchema } from '~/validations/exam';
-import Icons from '~/assets/icons';
-import { compile } from 'html-to-text';
-import Question from './Question';
 import classNames from 'classnames';
+import Question from './Question';
+import { compile } from 'html-to-text';
+import { useExamStore, useQuestionStore } from '~/store';
+import { useEffect } from 'react';
+import { getQuesOfQuiz } from '~/apis';
+import { toast } from 'react-toastify';
 
-const FormEditExam = () => {
-  const [showQuestionList, setShowQuestionList] = useState('showQuestion');
-  const [selectedQuestions, setSelectedQuestions] = useState([]);
-  const [quesPoint, setQuesPoint] = useState([]); // chứa quesID + Point
-  const [containerQues, setContainerQues] = useState([]);
-  const [quesOfQuiz, setQuesOfQuiz] = useState([]);
-  const { targetExam, setTargetExam, openModal, updateExam } = useExamStore((state) => state);
+export default function FormUpdateExam() {
+  const { targetExam } = useExamStore((state) => state);
   const { questionList } = useQuestionStore((state) => state);
-
-  const compiledConvert = compile({
-    limits: {
-      ellipsis: ' ...',
-    },
-  });
-
-  const [totalPoints, setTotalPoints] = useState(0);
-  //tính điểm
-  useEffect(() => {
-    const points = quesPoint
-      .map((element) => parseInt(element.point))
-      .reduce((acc, curr) => acc + curr, 0);
-    setTotalPoints(points);
-  }, [quesPoint]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await getQuesOfQuiz(targetExam.id);
-        if (response) {
-          setQuesOfQuiz(response); //point
-          const cloneQuesList = [...questionList];
-          setContainerQues(cloneQuesList.filter((q) => q.category.id === targetExam.category.id)); //listQues
-          setSelectedQuestions(response.map((q) => q.id));
-        }
-      } catch (error) {
-        toast.error(error);
-      }
-    })();
-  }, [questionList, targetExam.category.id, targetExam.id]);
-  console.log('ques', quesOfQuiz);
-
+  const [showQuestionList, setShowQuestionList] = useState('showQuestion');
+  const [selectedQuestions, setSelectedQuestions] = useState([]); // lưu câu hỏi
+  const [quesOfQuiz, setQuesOfQuiz] = useState([]);
+  const [containerQues, setContainerQues] = useState([]); // ds câu hỏi được cập nhật thêm
   const {
     control,
     formState: { errors },
-    handleSubmit,
   } = useForm({
     mode: 'onSubmit',
     resolver: zodResolver(FormExamCreateSchema),
@@ -73,7 +36,31 @@ const FormEditExam = () => {
       })),
     },
   });
-  console.log(selectedQuestions);
+  console.log('a', selectedQuestions);
+  console.log('b', quesOfQuiz);
+  console.log('c', containerQues);
+
+  const compiledConvert = compile({
+    limits: {
+      ellipsis: ' ...',
+    },
+  });
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await getQuesOfQuiz(targetExam.id);
+        if (response) {
+          setQuesOfQuiz(response); //point
+          const cloneQuesList = [...questionList];
+          setContainerQues(cloneQuesList.filter((q) => q.category.id === targetExam.category.id)); //listQues
+          //setSelectedQuestions(response.map((q) => q.id));
+        }
+      } catch (error) {
+        toast.error(error);
+      }
+    })();
+  }, [targetExam.id]);
 
   const handleQuestionSelect = (question) => {
     if (selectedQuestions && selectedQuestions.includes(question)) {
@@ -90,64 +77,10 @@ const FormEditExam = () => {
   const handleShowQuestion = () => {
     setShowQuestionList('showQuestion');
   };
-
-  const handleFormUpdate = async (data) => {
-    try {
-      const body = {
-        title: data.examName,
-        categoryId: targetExam.category.id,
-        description: data.description,
-        maxMarks: totalPoints,
-        durationMinutes: parseInt(data.time),
-        listQuestion: quesPoint.map((ques) => ({
-          questionId: ques.id,
-          marksOfQuestion: ques.point,
-        })),
-      };
-
-      const response = await updateQuiz(targetExam.id, body);
-
-      if (response) {
-        updateExam(response);
-        toast.success('Cập nhật bài tập thành công', { toastId: 'update_exam' });
-        onClose();
-      }
-    } catch (error) {
-      toast.error(error.message, { toastId: 'update_exam' });
-    }
-  };
-
-  // const handlePointsChange = (id, value) => {
-  //   setQuesPoint((prev) => {
-  //     if (value < 1 || value > 10) {
-  //       toast.error('Giá trị điểm chỉ từ 1 đến 10!', { toastId: 'fail_point' });
-  //     }
-
-  //     const foundPoint = prev.find((p) => p.id === id);
-  //     if (!foundPoint) {
-  //       return [...prev, { id, point: value }];
-  //     } else {
-  //       foundPoint.point = value;
-  //       return [...prev];
-  //     }
-  //   });
-  // };
-
-  const handleCategoryForFilter = (e) => {
-    const cloneQuesList = [...questionList];
-    setContainerQues(cloneQuesList.filter((q) => q.category.id === parseInt(e)));
-  };
-
-  const onClose = () => {
-    setTargetExam(null);
-    openModal(null);
-  };
-
   return (
     <div className="flex items-center justify-center px-40 py-6">
       <div className="container mx-auto p-4 bg-slate-100 rounded-md">
-        <h3 className="mb-5">Chỉnh sửa bài tập</h3>
-        <form onSubmit={handleSubmit(handleFormUpdate)} className="w-full">
+        <form className="w-full">
           <div className="flex flex-wrap -mx-3 mb-4">
             <div className="w-full flex px-3">
               <div className="m-3 w-[50%]">
@@ -175,18 +108,19 @@ const FormEditExam = () => {
                   label="Danh mục"
                   disabled
                   error={errors.category?.message}
-                  onChange={handleCategoryForFilter}
+                  //onChange={handleCategoryForFilter}
                 />
-                {showQuestionList ? (
+                {showQuestionList === 'showQuestion' && (
                   <div className="mt-5">
                     <span className="text-sm font-bold text-icon mb-1">Điểm của bài tập</span>
                     <TextView
                       control={control}
-                      value={totalPoints}
+                      //value={totalPoints}
                       className="text-sm border rounded-md"
                     />
                   </div>
-                ) : (
+                )}
+                {showQuestionList === 'select' && (
                   <div className="mt-5">
                     <FormInput
                       control={control}
@@ -279,7 +213,7 @@ const FormEditExam = () => {
             </Button>
             <Button
               type="button"
-              onClick={onClose}
+              //onClick={onClose}
               className="px-6 py-2 ml-3 text-sm !border border-solid !border-danger text-danger hover:bg-danger hover:bg-opacity-10"
             >
               Thoát
@@ -289,10 +223,4 @@ const FormEditExam = () => {
       </div>
     </div>
   );
-};
-
-export default FormEditExam;
-
-FormEditExam.propTypes = {
-  onClose: PropTypes.func,
-};
+}

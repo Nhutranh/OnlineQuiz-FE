@@ -27,24 +27,15 @@ export default function DoneCreateExam() {
   const [totalPoints, setTotalPoints] = useState(0);
   const [listQuesFail, setListQuesFail] = useState([]); // list id câu hỏi nhập điểm bị sai
   const [checkPoint, setCheckPoint] = useState(false);
+  console.log(quesPoint);
 
-  useEffect(() => {
-    //console.log('chéch poi', checkPoint);
-    // const initialQuesPoint = prevDataOfExam.listQuestion.map((question) => ({
-    //   id: question.id,
-    //   point: '',
-    // }));
-    // setQuesPoint(initialQuesPoint);
-  }, [quesPoint]);
-
-  //console.log(quesPoint);
   //tính điểm
   useEffect(() => {
     const points = quesPoint
       .map((element) => parseInt(element.point))
       .reduce((acc, curr) => acc + curr, 0);
     setTotalPoints(points);
-  }, [quesPoint]);
+  }, [quesPoint, setQuesPoint]);
 
   const handlePoint = (e) => {
     e.stopPropagation();
@@ -68,11 +59,9 @@ export default function DoneCreateExam() {
             listQuesFail.length === 1 &&
             prevDataOfExam.listQuestion.length === quesPoint.length
           ) {
-            console.log(2);
             setCheckPoint(true);
           }
           const index = listQuesFail.indexOf(id);
-          console.log('index', index);
           setListQuesFail((prev) => prev.splice(index, 1));
 
           foundPoint.point = point;
@@ -87,23 +76,23 @@ export default function DoneCreateExam() {
       setCheckPoint(false);
     }
   };
-  console.log('NH', listQuesFail);
 
   const handleSubmit = async () => {
-    console.log('submit');
     const enterPointForAllQues = quesPoint.length === prevDataOfExam.listQuestion.length;
     if (enterPointForAllQues) {
       try {
         const body = {
           title: prevDataOfExam.title,
+          maxMarks: totalPoints,
           categoryId: prevDataOfExam.categoryId,
           description: prevDataOfExam.description,
           durationMinutes: prevDataOfExam.durationMinutes,
           listQuestion: quesPoint.map((q) => ({
             questionId: q.id,
-            marksOfQuestion: parseInt(q.point) || 0,
+            marksOfQuestion: q.point || 0,
           })),
         };
+        console.log('body', body);
         const response = await createExam(body);
 
         if (response) {

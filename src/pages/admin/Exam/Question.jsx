@@ -55,5 +55,4 @@ Question.propTypes = {
   selectQues: PropTypes.array,
   onPointChange: PropTypes.func,
   listQuestion: PropTypes.array,
-  point: PropTypes.array,
 };

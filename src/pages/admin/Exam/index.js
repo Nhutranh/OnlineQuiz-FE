@@ -6,3 +6,4 @@ export { default as DeleteExam } from './DeleteExam';
 export { default as Question } from './Question';
 export { default as CheckPractice } from './CheckPractice';
 export { default as DoneCreateExam } from './doneCreateExam';
+export { default as FormUpdateExam } from './FormUpdateExam';
