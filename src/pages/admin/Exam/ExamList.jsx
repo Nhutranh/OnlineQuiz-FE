@@ -15,7 +15,6 @@ import { toast } from 'react-toastify';
 
 export default function ExamList() {
   const { examList, setExamList, setTargetExam, openModal } = useExamStore((state) => state);
-  console.log(examList);
   const { control } = useForm();
 
   const [searchKeywords, setSearchKeywords] = useState('');

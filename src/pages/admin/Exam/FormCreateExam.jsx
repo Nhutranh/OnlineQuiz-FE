@@ -80,6 +80,16 @@ const FormCreateExam = () => {
     setContainerQues(cloneQuesList.filter((q) => q.category.id === parseInt(e)));
   };
 
+  const handleInputTime = (e) => {
+    const timeInput = Number(e);
+    console.log('time', timeInput);
+    if (timeInput < 5 || timeInput > 180) {
+      toast.error('Thời gian làm bài phải tối thiểu 5 phút và tối đa 180 phút!', {
+        toastId: 'fail_time',
+      });
+    }
+  };
+
   return (
     <div className="w-full">
       <div className="p-4 bg-slate-50 rounded-md ">
@@ -118,10 +128,14 @@ const FormCreateExam = () => {
               </div>
               <div className="m-3 w-[50%]">
                 <FormInput
+                  min="5"
+                  max="180"
                   control={control}
                   name="time"
+                  type="number"
                   title="Thời gian làm bài cho bài tập"
                   placeholder="Nhập thời gian làm bài"
+                  onChange={(e) => handleInputTime(e)}
                   required
                 />
               </div>

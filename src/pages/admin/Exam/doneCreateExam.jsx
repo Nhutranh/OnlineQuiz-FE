@@ -27,7 +27,6 @@ export default function DoneCreateExam() {
   const [totalPoints, setTotalPoints] = useState(0);
   const [listQuesFail, setListQuesFail] = useState([]); // list id câu hỏi nhập điểm bị sai
   const [checkPoint, setCheckPoint] = useState(false);
-  console.log(quesPoint);
 
   //tính điểm
   useEffect(() => {
