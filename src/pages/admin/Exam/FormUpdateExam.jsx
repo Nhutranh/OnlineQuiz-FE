@@ -23,6 +23,7 @@ export default function FormUpdateExam() {
   const [listQuesFail, setListQuesFail] = useState([]); // list id câu hỏi nhập điểm bị sai
   const [checkPoint, setCheckPoint] = useState(false);
   const [totalPoints, setTotalPoints] = useState(0); // điểm
+  const [isQuestionsSelected, setIsQuestionsSelected] = useState(false);
   const listPoint = useRef({});
   const {
     control,
@@ -42,18 +43,6 @@ export default function FormUpdateExam() {
       })),
     },
   });
-  //console.log('a', selectedQuestions);
-  // console.log('câu được chọn', quesOfQuiz);
-  // console.log('các câu hỏi có cate 1 loại', containerQues);
-  //const point = quesOfQuiz.map((item) => item.additionalFields.marksOfQuestion);
-
-  //tính điểm
-  // useEffect(() => {
-  //   const points = quesPoint
-  //     .map((element) => parseInt(element.point))
-  //     .reduce((acc, curr) => acc + curr);
-  //   setTotalPoints(points);
-  // }, [quesPoint]);
 
   const compiledConvert = compile({
     limits: {
@@ -65,9 +54,8 @@ export default function FormUpdateExam() {
     (async () => {
       try {
         const response = await getQuesOfQuiz(targetExam.id);
-        console.log(response);
         if (response) {
-          setQuesOfQuiz(response); //point
+          setQuesOfQuiz(response);
           response.map((el) => (listPoint.current[el.id] = el.additionalFields.marksOfQuestion));
           const cloneQuesList = [...questionList];
           const initialQuesPoint = response.map((item) => ({
@@ -85,10 +73,36 @@ export default function FormUpdateExam() {
         toast.error(error);
       }
     })();
-  }, []);
-  console.log(listQuesFail);
+  }, [questionList, targetExam.category.id, targetExam.id, targetExam.maxMarks]);
+
+  console.log('câu hỏi', questionList);
+  console.log('điểm', quesPoint);
+
+  useEffect(() => {
+    if (isQuestionsSelected) {
+      const updateListQuestion = selectedQuestions.map((id) => {
+        const foundQuestion = containerQues.find((ques) => ques.id === id);
+        const additionalFields = quesOfQuiz.find((item) => item.id === id);
+
+        if (foundQuestion) {
+          return {
+            ...quesOfQuiz,
+            id: foundQuestion.id,
+            additionalFields: additionalFields
+              ? additionalFields.additionalFields
+              : { marksOfQuestion: 1 },
+          };
+        } else {
+          return { id, additionalFields: { marksOfQuestion: 1 } };
+        }
+      });
+      console.log('update', updateListQuestion);
+      setQuesOfQuiz(updateListQuestion);
+    }
+  }, [isQuestionsSelected, containerQues, selectedQuestions]);
 
   const handleQuestionSelect = (questionID) => {
+    setIsQuestionsSelected(true);
     if (selectedQuestions && selectedQuestions.includes(questionID)) {
       setSelectedQuestions(selectedQuestions.filter((id) => id !== questionID));
     } else {
@@ -245,12 +259,12 @@ export default function FormUpdateExam() {
                       {containerQues.map((item, index) => {
                         return (
                           <tr
-                            onClick={() => handleQuestionSelect(item.id)}
+                            onClick={() => handleQuestionSelect(item?.id)}
                             key={item.id}
                             className="flex bg-slate-50 items-center border-b border-[#d1d2de] hover:bg-slate-100 h-[45px] font-semibold text-[#3b3e66]"
                           >
                             <td className="p-3 flex flex-auto w-[60%]">
-                              {index + 1}.{compiledConvert(item.content)}
+                              {index + 1}.{compiledConvert(item?.content)}
                             </td>
                             <td className="p-3 flex-shrink-0 w-[30%]">
                               {item.category?.title || '--'}
@@ -279,10 +293,10 @@ export default function FormUpdateExam() {
                   {quesOfQuiz.map((ques, index) => (
                     <div
                       className="m-3 bg-slate-100 hover:bg-slate-50 shadow-sm rounded-md py-1 px-3 grid grid-cols-4"
-                      key={ques.id}
+                      key={ques?.id}
                     >
                       <div className="col-span-3">
-                        {index + 1}.{compiledConvert(ques.content)}
+                        {index + 1}.{compiledConvert(ques?.content)}
                       </div>
 
                       <div className="col-span-1">
@@ -294,7 +308,7 @@ export default function FormUpdateExam() {
                           className="h-[40px] w-[60px] border-2 shadow-lg rounded-md"
                           type="number"
                           name="point"
-                          defaultValue={ques.additionalFields.marksOfQuestion}
+                          defaultValue={ques?.additionalFields?.marksOfQuestion || 1}
                           required
                         />
                       </div>

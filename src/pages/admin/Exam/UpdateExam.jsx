@@ -8,7 +8,6 @@ import { getQuesOfQuiz, updateQuiz } from '~/apis';
 import { useExamStore, useQuestionStore } from '~/store';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormExamCreateSchema } from '~/validations/exam';
-import Icons from '~/assets/icons';
 import { compile } from 'html-to-text';
 import Question from './Question';
 import classNames from 'classnames';
