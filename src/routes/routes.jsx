@@ -8,6 +8,7 @@ import { SignInPage, SignUpPage } from '~/pages/auth';
 import { ShowHistory, StartPractice, StudentExcises } from '~/pages/student';
 
 import router from './const';
+import UserInfo from '~/pages/user/account/UserInfo';
 
 const routes = createBrowserRouter([
   {
@@ -110,6 +111,10 @@ const routes = createBrowserRouter([
             ],
           },
         ],
+      },
+      {
+        path: router.account,
+        element: <UserInfo />,
       },
     ],
   },
