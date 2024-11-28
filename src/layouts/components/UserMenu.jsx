@@ -6,6 +6,7 @@ import { useUserStore } from '~/store';
 import ChangePassword from './ChangePassword';
 import { router } from '~/routes';
 import { useNavigate } from 'react-router-dom';
+
 function UserMenu() {
   const { signOut } = useAuth();
   const [isLogout, setIsLogout] = useState(false);
@@ -26,7 +27,7 @@ function UserMenu() {
           <div className="w-full border border-strike opacity-40"></div>
           <div>
             <Button
-              className="flex w-full items-center gap-x-4 p-2 hover:bg-info hover:text-info hover:bg-opacity-10 border-none text-text"
+              className="flex w-full items-center p-2 hover:bg-info hover:text-info hover:bg-opacity-10 border-none text-sm"
               onClick={() => navigate(router.account)}
             >
               Xem thông tin tài khoản

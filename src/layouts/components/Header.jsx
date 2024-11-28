@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Icons from '~/assets/icons';
 import images from '~/assets/images';
 import { Button } from '~/components';
 import { useUserStore } from '~/store';
 import UserMenu from './UserMenu';
+import { useLocation } from 'react-router-dom';
 
 const RoleName = {
   ['admin']: 'Quản lý',
@@ -13,6 +14,11 @@ const RoleName = {
 function Header() {
   const user = useUserStore((state) => state.user);
   const [openMenu, setOpenMenu] = useState(false);
+  const location = useLocation()?.pathname || window.location.pathname;
+
+  useEffect(() => {
+    setOpenMenu(false);
+  }, [location]);
 
   return (
     <div className="fixed w-[calc(100%-250px)] h-[64px] flex items-center py-1 backdrop-blur-[6px] ml-[250px] bg-white  z-50 border-b border-dashed border-slate-300">
