@@ -17,6 +17,7 @@ const router = {
   doneCreateExam: '/admin/createExam/doneCreateExam',
   signIn: '/auth/sign-in',
   signUp: '/auth/sign-up',
+  account: '/account',
 };
 
 export const AdminNavLinks = [
