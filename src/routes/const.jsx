@@ -41,11 +41,11 @@ export const AdminNavLinks = [
     name: 'Danh mục',
     icon: <Icons.Squared />,
   },
-  {
-    path: router.studentList,
-    name: 'Học viên',
-    icon: <Icons.Academic />,
-  },
+  // {
+  //   path: router.studentList,
+  //   name: 'Học viên',
+  //   icon: <Icons.Academic />,
+  // },
   {
     path: router.teacher,
     name: 'Tài khoản',
