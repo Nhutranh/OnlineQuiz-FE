@@ -130,12 +130,6 @@ function SignInPage() {
         };
         await postNewPassword(body, email);
         setOpenNewPassword(false);
-        // setTimeout(async () => {
-        //   await signInWithEmailPassword({
-        //     email: email,
-        //     password: password,
-        //   });
-        // }, 3000);
       } catch (error) {
         console.log(error);
       }

@@ -32,6 +32,8 @@
     "bcryptjs": "^2.4.3",
     "classnames": "^2.5.1",
     "firebase": "^10.8.0",
+    "highcharts": "^12.1.0",
+    "highcharts-react-official": "^3.2.1",
     "html-to-text": "^9.0.5",
     "moment": "^2.30.1",
     "prop-types": "^15.8.1",

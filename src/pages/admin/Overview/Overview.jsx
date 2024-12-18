@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { getStatistic } from '~/apis';
-import Icons from '~/assets/icons';
-import { Card } from '~/components';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 
 function Overview() {
-  const [statistic, setStatistic] = useState([]);
-  console.log({statistic})
+  const [statistics, setStatistic] = useState([]);
+  console.log({ statistics });
 
   useEffect(() => {
     (async () => {
@@ -16,55 +16,49 @@ function Overview() {
         setStatistic(statistics);
       } catch (error) {
         toast.error('Không thể lấy dữ liệu thống kê', { toastId: 'get_statistic' });
-      } 
+      }
     })();
   }, []);
 
+  const categories = statistics.map((item) => `Tháng ${item.month}`);
+  const totalStudents = statistics.map((item) => item.totalStudents);
+  const totalQuestions = statistics.map((item) => item.totalQuestions);
+  const totalQuizzes = statistics.map((item) => item.totalQuizzes);
+
+  const options = {
+    chart: {
+      type: 'line',
+      height: '50%',
+    },
+    title: {
+      text: 'Thống kê dữ liệu hàng tháng',
+    },
+    xAxis: {
+      categories,
+      title: { text: 'Tháng' },
+    },
+    yAxis: {
+      title: { text: 'Số lượng' },
+    },
+    series: [
+      {
+        name: 'Học sinh',
+        data: totalStudents,
+      },
+      {
+        name: 'Câu hỏi',
+        data: totalQuestions,
+      },
+      {
+        name: 'Bài tập',
+        data: totalQuizzes,
+      },
+    ],
+  };
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between gap-x-5 w-full">
-        <Card className="w-full min-h-20 ">
-            <div className=" bg-green-300 shadow-lg rounded-lg p-6 w-60%  transition-transform duration-300">
-          <div className="flex items-center">
-            <div className="bg-white rounded-full h-8 w-8 flex items-center justify-center">
-              <Icons.Question/>
-            </div>
-            <div className="ml-4">
-              <p className="text-white text-lg">Số lượng câu hỏi</p>
-              <p className="text-2xl font-bold">{statistic.totalNumberOfQuestions}</p>
-            </div>
-          </div>
-        </div>
-        </Card>
-        <Card className="w-full min-h-20">
-            <div className="bg-blue-300 shadow-lg rounded-lg p-6 w-70%  transition-transform duration-300 ">
-          <div className="flex items-center">
-            <div className="bg-white rounded-full h-8 w-8 flex items-center justify-center">
-              <Icons.Plus/>
-            </div>
-            <div className="ml-4">
-              <p className="text-white text-lg">Số lượng bài tập</p>
-              <p className="text-2xl font-bold">{statistic.totalNumberOfQuizzes}</p>
-            </div>
-          </div>
-        </div>
-        </Card>
-        <Card className="w-full min-h-20 ">
-            <div className="bg-purple-300 shadow-lg rounded-lg p-6 w-70%  transition-transform duration-300">
-          <div className="flex items-center">
-            <div className="bg-white rounded-full h-8 w-8 flex items-center justify-center">
-              <Icons.Person/>
-            </div>
-            <div className="ml-4">
-              <p className="text-white text-lg">Số lượng học viên</p>
-              <p className="text-2xl font-bold">{statistic.totalNumberOfStudents}</p>
-            </div>
-          </div>
-        </div>
-        </Card>
-       
-      </div>
+      <HighchartsReact highcharts={Highcharts} options={options} />
     </div>
   );
 }
