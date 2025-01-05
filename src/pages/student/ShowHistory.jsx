@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getHistory, searchHistory } from '~/apis';
+import { deleteHistory, getHistory, searchHistory } from '~/apis';
 import Icons from '~/assets/icons';
 import { Button, Input } from '~/components';
 import { useDebounce } from '~/hooks';
@@ -25,16 +25,20 @@ export default function ShowHistory() {
       const searchValue = await searchHistory({ searchContent: debounceQuery });
       setHistory(searchValue || []);
     })();
-  }, [debounceQuery]);
+  }, [debounceQuery, history]);
 
   const handleInputChange = (e) => {
     setSearchKeywords(e.target.value);
   };
 
-  const handleDelete = (item) => {
-    const result = history.filter((a) => a.id != item);
-    setHistory(result);
-    toast.success('Xóa thành công!', { toastId: 'delete_history' });
+  const handleDelete = async (id) => {
+    try {
+      const respone = await deleteHistory(id);
+      console.log(respone);
+      toast.success('Xóa thành công!', { toastId: 'delete_history' });
+    } catch (error) {
+      toast.error('Có lỗi xay ra!', { toastId: 'fail_delete_history' });
+    }
   };
 
   return (
@@ -56,11 +60,11 @@ export default function ShowHistory() {
           {history.map((item) => (
             <div
               key={item.id}
-              className="text-sm container mx-auto p-2 bg-slate-50 shadow-md rounded-md w-full mb-3"
+              className="text-sm container mx-auto p-2 bg-slate-50 shadow-md rounded-md w-full mb-3 hover:scale-105 transition-transform duration-300"
             >
               <div key={item.id}>
                 <div className="flex">
-                  <div className="w-[75%]">
+                  <div className="w-[75%] px-5 py-3">
                     <span className="text-lg font-semibold">
                       Bài tập: {item.quiz.tittle} - {moment(item.startTime).format('DD/MM/YYYY')}
                     </span>
@@ -68,7 +72,7 @@ export default function ShowHistory() {
                       <div className="flex">
                         <div className="font-bold">Bắt đầu làm bài: </div>{' '}
                         {moment(item.startTime).format(' HH:mm')} -{' '}
-                        <div className="font-bold">Nộp bài: </div>{' '}
+                        <div className="font-bold"> Nộp bài: </div>{' '}
                         {moment(item.submitTime).format('HH:mm')}
                       </div>
                       <div>Tổng thời gian: {item.durationTime} </div>
